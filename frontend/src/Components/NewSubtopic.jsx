@@ -1,17 +1,24 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Carousel from '../Components/Carousel';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 const images = ['https://www.pngkey.com/png/detail/233-2332677_image-500580-placeholder-transparent.png', 'https://www.pngkey.com/png/detail/233-2332677_image-500580-placeholder-transparent.png', 'https://www.pngkey.com/png/detail/233-2332677_image-500580-placeholder-transparent.png'];
-
+import { createSubtopics, clearErrors } from '../Actions/subtopicActions';
+import { useDispatch, useSelector } from 'react-redux';
+import { NEW_SUBTOPICS_RESET } from '../constants/subtopicConstants';
 import { getYouTubeVideoId } from '../utils/VideoID';
+import { toast } from 'react-toastify';
 const NewSubtopic = ({ item }) => {
+    const dispatch = useDispatch();
+    const { success, loading, error } = useSelector(state => state.newSubtopics);
     const [imagePreviews, setImagePreviews] = useState([]);
     // Validation schema using Yup
     const validationSchema = Yup.object().shape({
         title: Yup.string().required('Title is required'),
         videoLink: Yup.string().required('Video link is required'),
-        images: Yup.array().of(Yup.string().url('Must be a valid URL')).required('At least one image URL is required'),
+        images:Yup.array()
+        .of(Yup.mixed().required('At least one image file is required'))
+        .min(1, 'At least one image file is required'),
         transcript: Yup.string().required('Transcript is required'),
     });
     const handleImageUpload = (event) => {
@@ -30,10 +37,30 @@ const NewSubtopic = ({ item }) => {
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
+            const formData = new FormData();
+            formData.set('title', values.title);
+            formData.set('videoLink', values.videoLink);
+            formData.set('images', values.images);
+            formData.set('transcript', values.transcript);
             // Add your logic to submit values to the database here
-            console.log('Form submitted:', values);
+            dispatch(createSubtopics(formData));
+
+            // console.log('Form submitted:', formData);
         },
     });
+    useEffect(() => {
+        if (error) {
+            toast.error(error);
+            dispatch(clearErrors())
+        }
+
+        if (success) {
+            // navigate('/admin/modules');
+            toast.success('Subtopics created successfully')
+            dispatch({ type: NEW_SUBTOPICS_RESET })
+
+        }
+    }, [error, success, dispatch])
     return (
         <section
             className="p-5 sm:p-8 md:p-10 border-4 border-dashed border-gray-300 my-3 rounded-lg"

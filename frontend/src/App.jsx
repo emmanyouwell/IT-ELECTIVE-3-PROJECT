@@ -6,6 +6,7 @@ import Files from "./Pages/Files";
 import Classroom from "./Pages/Classroom";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import {ToastContainer} from 'react-toastify';
 function App() {
   useEffect(() => {
     AOS.init({
@@ -22,6 +23,7 @@ function App() {
         <Route path="/login" element={<Login/>}/>
         <Route path="/classroom" element={<Classroom/>}/>
       </Routes>
+      <ToastContainer position="bottom-right"/>
     </BrowserRouter>
   );
 }

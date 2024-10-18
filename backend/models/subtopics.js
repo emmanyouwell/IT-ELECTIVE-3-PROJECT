@@ -20,4 +20,4 @@ const subtopicSchema = new mongoose.Schema({
     }
 });
 
-const Subtopic = mongoose.model('Subtopic', subtopicSchema);
+module.exports = mongoose.model('Subtopic', subtopicSchema);

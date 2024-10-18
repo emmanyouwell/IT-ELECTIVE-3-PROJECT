@@ -75,3 +75,20 @@ exports.updateGroup = async (req, res, next) => {
         })
     }
 }
+
+exports.deleteGroup = async (req,res,next) => {
+    try{
+        const group = await Group.findByIdAndDelete(req.params.id);
+        if (group){
+            res.status(200).json({
+                success: true,
+                message: 'Group deleted'
+            })
+        }
+    }catch{
+        return res.status(400).json({
+            success: false,
+            message: 'Group not deleted'
+        })
+    }
+}
