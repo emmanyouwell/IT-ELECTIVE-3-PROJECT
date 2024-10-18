@@ -8,7 +8,7 @@ const Home = () => {
     const [splash, setSplash] = useState(false);
     const handleClick = () => {
         setSplash(true);
-        navigate('/files');
+        navigate('/classroom');
     }
     return (
         <>

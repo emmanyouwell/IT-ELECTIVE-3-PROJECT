@@ -1,20 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../assets/css/Card.css'; // For perspective property or you can use inline styles
-
-const FlipCards = () => {
+const cardColors = ['#264653', '#2a9d8f', '#e9c46a', '#f4a261', '#e76f51']; 
+const FlipCards = ({ questions }) => {
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const getColor = (index, colors) => {
+        return colors[index % colors.length]; // Cycle through colors array
+    };
+    const handleNext = () => {
+        // Increment index, but wrap around when it reaches the end of the array
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % questions.length);
+    };
+    const handlePrev = () => {
+        setCurrentIndex((prevIndex) => (prevIndex - 1 + questions.length) % questions.length);
+    }
     return (
-        <div className="card">
-            <div className="card-inner">
-                <div className="card-front flex items-center justify-center bg-purple-700 text-white border-purple-700 border-4 rounded-lg p-5">
-                    <p className="font-concert text-center text-2xl">A large and powerful computer
-                        system used for critical applications
-                        and large-scale data processing</p>
+        <>
+            <div className="flex flex-col justify-between items-center w-full">
+
+                <div className="card mb-5">
+                    <div className="card-inner">
+                        <div className="card-front flex items-center justify-center text-white  border-4 rounded-lg p-5" style={{backgroundColor: getColor(currentIndex, cardColors), borderColor: getColor(currentIndex, cardColors)}}>
+                            <p className="font-concert text-center text-5xl">{questions[currentIndex].q}</p>
+                        </div>
+                        <div className="card-back flex items-center justify-center bg-green-500 text-white border-green-500 border-4 rounded-lg p-5">
+                            <p className="font-concert text-center text-5xl">{questions[currentIndex].a}</p>
+                        </div>
+                    </div>
                 </div>
-                <div className="card-back flex items-center justify-center bg-orange-500 text-white border-orange-500 border-4 rounded-lg p-5">
-                    <p className="font-concert text-center text-3xl">Mainframe</p>
+                <div className="container flex justify-between items-center w-[50%]">
+                    <button
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        onClick={handlePrev}
+                    >
+                        Previous
+                    </button>
+                    <button
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        onClick={handleNext}
+                    >
+                        Next
+                    </button>
                 </div>
+
             </div>
-        </div>
+
+        </>
+
     );
 };
 
