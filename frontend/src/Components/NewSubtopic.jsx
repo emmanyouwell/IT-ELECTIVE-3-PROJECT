@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { NEW_SUBTOPICS_RESET } from '../constants/subtopicConstants';
 import { getYouTubeVideoId } from '../utils/VideoID';
 import { toast } from 'react-toastify';
-const NewSubtopic = ({ item }) => {
+const NewSubtopic = ({ setIsVisible }) => {
     const dispatch = useDispatch();
     const { success, loading, error } = useSelector(state => state.newSubtopics);
     const [imagePreview, setImagePreview] = useState(images)
@@ -73,6 +73,7 @@ const NewSubtopic = ({ item }) => {
             // navigate('/admin/modules');
             console.log('toast')
             toast.success('Subtopics created successfully')
+            
             dispatch({ type: NEW_SUBTOPICS_RESET });
 
         }

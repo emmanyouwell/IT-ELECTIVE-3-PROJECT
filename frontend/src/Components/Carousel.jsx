@@ -6,6 +6,7 @@ import useWindowSize from "../hooks/useWindowSize";
 const CarouselComponent = ({ images }) => {
   const {width} = useWindowSize();
   const isSmall = width < 768;
+  const normalizedImages = Array.isArray(images) ? images : [images];
   return (
     <Carousel  prevArrow={({ handlePrev }) => (
       <IconButton
@@ -56,9 +57,9 @@ const CarouselComponent = ({ images }) => {
         </svg>
       </IconButton>
     )} className="rounded-xl">
-      {images.map((image, index) => (<img
+      {normalizedImages.map((image, index) => (<img
         key={index}
-        src={image}
+        src={image.url ? image.url : image}
         alt="image 1"
         className="h-[400px] w-full object-contain xl:object-cover"
       />))}

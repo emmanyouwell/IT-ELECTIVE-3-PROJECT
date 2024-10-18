@@ -38,7 +38,7 @@ exports.getGroups = async (req, res, next) => {
 
 exports.getSingleGroup = async (req, res, next) => {
     try{
-        const group = await Group.findById(req.params.id);
+        const group = await Group.findById(req.params.id).populate('subtopics');
         if(group){
             res.status(200).json({
                 success: true,

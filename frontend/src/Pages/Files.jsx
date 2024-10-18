@@ -10,34 +10,48 @@ import data from '../data/data.json';
 import AddNewSectionButton from '../Components/AddNewSectionButton';
 import NewSubtopic from '../Components/NewSubtopic';
 const images = [img1, img2];
-
+import { NEW_SUBTOPICS_REQUEST } from '../constants/subtopicConstants';
+import { useDispatch, useSelector } from 'react-redux';
+import { getSubtopics, clearErrors } from '../Actions/subtopicActions';
+import { getGroupDetails, clearErrors as clearGroupErrors } from '../Actions/groupActions';
+import AddQuizSection from '../Components/AddQuizSection';
 const getColor = (index, colors) => {
     return colors[index % colors.length]; // Cycle through colors array
 };
 const borderColors = ['#264653', '#2a9d8f', '#e9c46a', '#f4a261', '#e76f51']; // Add as many colors as you like
 
 const Files = ({ group }) => {
-
+    const dispatch = useDispatch();
+    const { isVisible } = useSelector(state => state.newSubtopics)
+    const { success, loading, error } = useSelector(state => state.subtopics);
+    const { groups, loading: groupLoading, error: groupError } = useSelector(state => state.groupDetails);
+    // const [isVisible, setIsVisible] = useState(false);
     const toRoman = (num) => {
         const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX'];
 
         return romanNumerals[num - 1]; // Index starts at 0, so subtract 1
     };
+    const showForm = () => {
+        dispatch({ type: NEW_SUBTOPICS_REQUEST });
+    }
     useEffect(() => {
-        if (group) {
-            console.log(group);
-        }
+        dispatch(getGroupDetails(group))
 
-    }, [group])
+    }, [dispatch, error, group])
+    useEffect(() => {
+        if (groups) {
+            console.log(groups);
+        }
+    }, [groups])
     return (
         <>
             <div className="flex-grow h-full p-5">
 
                 <section className="p-2 mb-10">
-                    <h1 className="text-5xl font-concert font-bold text-center">{data[group].topic}</h1>
+                    <h1 className="text-5xl font-concert font-bold text-center">{groups && groups.topic}</h1>
 
                 </section>
-                {data[group].subtopic.map((item, index) => (
+                {groups && groups.subtopics && groups.subtopics.length > 0 && groups.subtopics.map((item, index) => (
                     <section
                         data-aos="fade-up"
                         className="p-5 sm:p-8 md:p-10 border-8 my-3 rounded-lg"
@@ -77,14 +91,17 @@ const Files = ({ group }) => {
 
                 ))}
 
-                <AddNewSectionButton />
-                <NewSubtopic item={data[group].subtopic[0]} />
+                {!isVisible && <AddNewSectionButton onAdd={showForm} />}
+                {isVisible && (<NewSubtopic />)}
+
+                <AddQuizSection/>
+                {false &&
                 <section className="p-10 border-8 rounded-lg" style={{ borderColor: borderColors[0] }}>
                     <div className="container flex flex-col justify-center items-center mb-10 mx-auto">
                         <h1 className="font-concert text-3xl font-bold mb-3">Quiz</h1>
                         <FlipCards questions={questions} />
                     </div>
-                </section>
+                </section>}
             </div>
 
 

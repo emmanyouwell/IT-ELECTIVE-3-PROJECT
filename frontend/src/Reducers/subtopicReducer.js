@@ -99,12 +99,14 @@ export const newSubtopicsReducer = (state = { subtopics: {} }, action) => {
         case NEW_SUBTOPICS_REQUEST:
             return {
                 ...state,
-                loading: true
+                loading: true,
+                isVisible: true
             }
         case NEW_SUBTOPICS_SUCCESS:
             return {
                 ...state,
                 loading: false,
+                isVisible: false,
                 success: action.payload.success,
                 subtopics: action.payload.newSubtopic
             }
@@ -116,7 +118,8 @@ export const newSubtopicsReducer = (state = { subtopics: {} }, action) => {
         case NEW_SUBTOPICS_RESET:
             return {
                 ...state,
-                success: false
+                success: false,
+                isVisible: false
             }
         case CLEAR_ERRORS:
             return {

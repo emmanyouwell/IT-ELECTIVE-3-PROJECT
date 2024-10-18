@@ -10,7 +10,7 @@ exports.createSubtopic = async (req, res, next) => {
             return res.status(400).json({ message: "No images were provided." });
         } else {
             console.log('goods: ', Array.isArray(images) ? images.length : 1);
-            console.log(images);
+            // console.log(images);
         }
 
         // Normalize images to always be an array
