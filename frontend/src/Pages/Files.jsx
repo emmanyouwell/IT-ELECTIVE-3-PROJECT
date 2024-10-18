@@ -7,17 +7,22 @@ import img1 from '../assets/image/3.png'
 import img2 from '../assets/image/4.png'
 import questions from '../data/questions.json'
 import data from '../data/data.json';
+import AddNewSectionButton from '../Components/AddNewSectionButton';
+import NewSubtopic from '../Components/NewSubtopic';
 const images = [img1, img2];
-const toRoman = (num) => {
-    const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX'];
-    return romanNumerals[num - 1]; // Index starts at 0, so subtract 1
-};
+
 const getColor = (index, colors) => {
     return colors[index % colors.length]; // Cycle through colors array
 };
 const borderColors = ['#264653', '#2a9d8f', '#e9c46a', '#f4a261', '#e76f51']; // Add as many colors as you like
 
 const Files = ({ group }) => {
+    
+    const toRoman = (num) => {
+        const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX'];
+        
+        return romanNumerals[num - 1]; // Index starts at 0, so subtract 1
+    };
     useEffect(() => {
         if (group) {
             console.log(group);
@@ -72,7 +77,8 @@ const Files = ({ group }) => {
 
                 ))}
 
-
+                <AddNewSectionButton />
+                <NewSubtopic item={data[group].subtopic[0]} />
                 <section className="p-10 border-8 rounded-lg" style={{ borderColor: borderColors[0] }}>
                     <div className="container flex flex-col justify-center items-center mb-10 mx-auto">
                         <h1 className="font-concert text-3xl font-bold mb-3">Quiz</h1>

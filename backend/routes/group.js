@@ -1,18 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const {registerUser, loginUser, logout, forgotPassword, resetPassword, getUserProfile, updatePassword, updateProfile, allUsers, getUserDetails} = require('../controllers/authController');
-const { isAuthenticatedUser,authorizeRoles} = require('../middleware/auth');
+const {createGroup, getGroups, getSingleGroup, updateGroup} = require('../controllers/groupController');
 
 
-router.post('/register',registerUser);
-router.post('/login', loginUser);
-router.get('/logout', logout);
-router.post('/password/forgot', forgotPassword);
-router.put('/password/reset/:token', resetPassword);
-router.get('/me', isAuthenticatedUser, getUserProfile);
-router.put('/me/update', isAuthenticatedUser, updateProfile)
-router.put('/password/update', isAuthenticatedUser, updatePassword);
-router.get('/admin/users', isAuthenticatedUser, allUsers);
-router.get('/admin/user/:id',isAuthenticatedUser, getUserDetails );
+router.post('/group/new', createGroup);
+router.get('/groups', getGroups);
+router.get('/group/:id', getSingleGroup);
+router.put('/group/:id', updateGroup);
 module.exports = router;

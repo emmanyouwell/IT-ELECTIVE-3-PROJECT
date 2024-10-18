@@ -1,25 +1,9 @@
 const Group = require('../models/groups');
 const cloudinary = require('cloudinary')
 const APIFeatures = require('../utils/apiFeatures')
-
-exports.createModule = async (req, res, next) => {
-    let imageLink = {}
-    try {
-        const result = await cloudinary.v2.uploader.upload(req.body.image, {
-            folder: 'IT_ELECTIVE_3',
-        });
-
-        imageLink = {
-            public_id: result.public_id,
-            url: result.secure_url
-        }
-
-    } catch (error) {
-        console.log(error)
-    }
-    
+const Subtopic = require('../models/subtopics');
+exports.createGroup = async (req, res, next) => {
     try{
-        req.body.img = imageLink
         const group = await Group.create(req.body);
         if (group){
             res.status(201).json({
@@ -27,6 +11,7 @@ exports.createModule = async (req, res, next) => {
                 group
             })
         }
+        
     }
     catch(error){
         return res.status(400).json({
@@ -34,6 +19,59 @@ exports.createModule = async (req, res, next) => {
 			message: 'Group not created'
 		})
     }
-    
-	
+}
+
+exports.getGroups = async (req, res, next) => {
+    try{
+        const groups = await Group.find();
+        res.status(200).json({
+            success: true,
+            groups
+        })
+    }catch{
+        return res.status(400).json({
+            success: false,
+            message: 'Groups not found'
+        })
+    }
+}
+
+exports.getSingleGroup = async (req, res, next) => {
+    try{
+        const group = await Group.findById(req.params.id);
+        if(group){
+            res.status(200).json({
+                success: true,
+                group
+            })
+        }
+    }
+    catch(error){
+        return res.status(400).json({
+            success: false,
+            message: 'Group not found'
+        })
+    }
+}
+
+exports.updateGroup = async (req, res, next) => {
+    try{
+        const group = await Group.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true,
+            useFindAndModify: false
+        });
+        if(group){
+            res.status(200).json({
+                success: true,
+                group
+            })
+        }
+    }
+    catch(error){
+        return res.status(400).json({
+            success: false,
+            message: 'Group not updated'
+        })
+    }
 }
