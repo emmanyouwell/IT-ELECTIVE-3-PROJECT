@@ -10,7 +10,7 @@ const { deleteSubtopic } = require('../controllers/subtopicController');
 const router = express.Router();
 
 // Route to create a new subtopic with multiple images
-router.post('/subtopic/new', upload.array('images', 5), createSubtopic); // 5 is the maximum number of files allowed
+router.post('/subtopic/new',upload.fields([{name:'images', maxCount: 20}]), createSubtopic); // 5 is the maximum number of files allowed
 router.get('/subtopics', getSubtopics);
 router.put('/subtopic/:id', updateSubtopic);
 router.get('/subtopic/:id', getSingleSubtopic);

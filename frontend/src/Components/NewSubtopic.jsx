@@ -11,28 +11,37 @@ import { toast } from 'react-toastify';
 const NewSubtopic = ({ item }) => {
     const dispatch = useDispatch();
     const { success, loading, error } = useSelector(state => state.newSubtopics);
-    const [imagePreviews, setImagePreviews] = useState([]);
+    const [imagePreview, setImagePreview] = useState(images)
+    const [image, setImage] = useState('')
     // Validation schema using Yup
     const validationSchema = Yup.object().shape({
         title: Yup.string().required('Title is required'),
         videoLink: Yup.string().required('Video link is required'),
-        images:Yup.array()
-        .of(Yup.mixed().required('At least one image file is required'))
-        .min(1, 'At least one image file is required'),
+
         transcript: Yup.string().required('Transcript is required'),
     });
-    const handleImageUpload = (event) => {
-        const files = Array.from(event.target.files);
-        const previews = files.map(file => URL.createObjectURL(file)); // Create object URLs for previews
-        setImagePreviews(previews); // Update previews state
-        formik.setFieldValue('images', files); // Keep original files for submission
-    };
+    const onChange = e => {
+
+        const files = Array.from(e.target.files)
+        setImagePreview([])
+        setImage([])
+        files.forEach(file => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                if (reader.readyState === 2) {
+                    setImage(oldArray => [...oldArray, reader.result])
+                    setImagePreview(oldArray => [...oldArray, reader.result])
+                }
+            }
+            reader.readAsDataURL(file)
+        })
+
+    }
     // useFormik hook
     const formik = useFormik({
         initialValues: {
             title: '',
             videoLink: '',
-            images: [],
             transcript: '',
         },
         validationSchema: validationSchema,
@@ -40,8 +49,14 @@ const NewSubtopic = ({ item }) => {
             const formData = new FormData();
             formData.set('title', values.title);
             formData.set('videoLink', values.videoLink);
-            formData.set('images', values.images);
+            // Ensure image is always an array
+            const imagesArray = Array.isArray(image) ? image : [image];
+            imagesArray.forEach(file => { formData.append('images', file) });
+
+
             formData.set('transcript', values.transcript);
+            // console.log('dispatching')
+
             // Add your logic to submit values to the database here
             dispatch(createSubtopics(formData));
 
@@ -56,10 +71,12 @@ const NewSubtopic = ({ item }) => {
 
         if (success) {
             // navigate('/admin/modules');
+            console.log('toast')
             toast.success('Subtopics created successfully')
-            dispatch({ type: NEW_SUBTOPICS_RESET })
+            dispatch({ type: NEW_SUBTOPICS_RESET });
 
         }
+
     }, [error, success, dispatch])
     return (
         <section
@@ -131,7 +148,7 @@ const NewSubtopic = ({ item }) => {
 
                     {/* Slides */}
                     <div className="w-full md:w-1/2 flex flex-col justify-center">
-                        <Carousel images={imagePreviews.length ? imagePreviews : images} />
+                        <Carousel images={imagePreview.length ? imagePreview : images} />
                         <div className="mt-4 mb-4 p-4">
                             <label className="block text-sm font-bold mb-2" htmlFor="images">
                                 Image Links (comma separated)
@@ -141,13 +158,12 @@ const NewSubtopic = ({ item }) => {
                                 id="images"
                                 name="images"
                                 accept="image/*"
-                                onChange={handleImageUpload}
+                                onChange={onChange}
                                 multiple
+                                required
                                 className="border border-gray-700 rounded-lg p-2 w-full"
                             />
-                            {formik.touched.images && formik.errors.images ? (
-                                <div className="text-red-500 text-sm mt-3">{formik.errors.images}</div>
-                            ) : null}
+
                         </div>
                     </div>
                 </div>

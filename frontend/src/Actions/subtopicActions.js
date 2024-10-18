@@ -30,7 +30,7 @@ import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 
 export const createSubtopics = (subtopicData) => async (dispatch) => {
-    
+    // console.log("dispatched")
     try {
         dispatch({type: NEW_SUBTOPICS_REQUEST})
         const config = {
@@ -38,6 +38,7 @@ export const createSubtopics = (subtopicData) => async (dispatch) => {
                 // 'Authorization': `Bearer ${getToken()}`
             }
         }
+        
         const { data } = await axios.post(`${process.env.REACT_APP_API}/api/v1/subtopic/new`, subtopicData, config)
         dispatch({
             type: NEW_SUBTOPICS_SUCCESS,
