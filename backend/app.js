@@ -8,7 +8,7 @@ const subtopic = require('./routes/subtopic');
 const quiz = require('./routes/quiz');
 app.use(cors(
     {
-        origin: ["http://localhost:5173", "https://tuphanda.onrender.com", "https://tup-handa.vercel.app", "https://www.youtube.com"],
+        origin: ["http://localhost:5173", "https://it-elective-3-project.vercel.app/","https://tuphanda.onrender.com", "https://tup-handa.vercel.app", "https://www.youtube.com"],
         credentials: true
     }
 ))
