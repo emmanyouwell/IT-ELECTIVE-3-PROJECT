@@ -2,6 +2,7 @@ import { legacy_createStore as createStore, combineReducers, applyMiddleware } f
 import {thunk} from 'redux-thunk';
 import { groupReducer, groupsDetailsReducer, groupsReducer, newGroupsReducer } from './Reducers/groupReducer';
 import { newSubtopicsReducer, showEditReducer, showFormReducer, subtopicReducer, subtopicsDetailsReducer, subtopicsReducer } from './Reducers/subtopicReducer';
+import { newQuizReducer, quizDetailsReducer, quizReducer, quizzesReducer, showQuizReducer } from './Reducers/quizReducer';
 
 
 const reducer = combineReducers({
@@ -14,7 +15,12 @@ const reducer = combineReducers({
     newSubtopics: newSubtopicsReducer,
     subtopic: subtopicReducer,
     form: showFormReducer,
-    edit: showEditReducer
+    edit: showEditReducer,
+    quizzes: quizzesReducer,
+    quizDetails: quizDetailsReducer,
+    newQuiz: newQuizReducer,
+    quiz: quizReducer,
+    quizForm: showQuizReducer,
 })
 
 let initialState = {

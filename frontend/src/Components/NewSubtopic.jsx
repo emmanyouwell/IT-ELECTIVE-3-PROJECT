@@ -203,7 +203,7 @@ const NewSubtopic = ({ setIsVisible, groupId }) => {
 
                     </button>
                     <button
-                        onClick={() => dispatch({ type: NEW_SUBTOPICS_RESET })}
+                        onClick={() => dispatch({ type: HIDE_FORM })}
                         className="font-bold py-2 px-4 rounded-lg border-2  border-red-500 text-red-500 hover:bg-red-500 hover:text-white flex items-center justify-center transition-all duration-200 w-28"
                     >
                         <XMarkIcon className="h-10 w-10" />

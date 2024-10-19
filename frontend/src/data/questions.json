@@ -1,35 +1,59 @@
 [
     {
         "q": "A large and powerful computer system used for critical applications and large-scale data processing",
-        "a": "Mainframe"
+        "a": "a. Mainframe",
+        "b": "b. Supercomputer",
+        "c": "c. Microcomputer",
+        "ans": "a. Mainframe"
     },
     {
         "q": "q2",
-        "a": "a2"
+        "a": "a. a2",
+        "b": "b. b2",
+        "c": "c. c2",
+        "ans": "a. a2"
     },
     {
         "q": "q3",
-        "a": "a3"
+        "a": "a. a3",
+        "b": "b. b3",
+        "c": "c. c3",
+        "ans": "a. a3"
     },
     {
         "q": "q4",
-        "a": "a4"
+        "a": "a. a4",
+        "b": "b. b4",
+        "c": "c. c4",
+        "ans": "a. a4"
     },
     {
         "q": "q5",
-        "a": "a5"
+        "a": "a. a5",
+        "b": "b. b5",
+        "c": "c. c5",
+        "ans": "a. a5"
     },
     {
         "q": "q6",
-        "a": "a6"
+        "a": "a. a6",
+        "b": "b. b6",
+        "c": "c. c6",
+        "ans": "a. a6"
     },
     {
         "q": "q7",
-        "a": "a7"
+        "a": "a. a7",
+        "b": "b. b7",
+        "c": "c. c7",
+        "ans": "a. a7"
     },
     {
         "q": "q7",
-        "a": "a7"
+        "a": "a. a7",
+        "b": "b. b7",
+        "c": "c. c7",
+        "ans": "a. a7"
     }
 
 ]

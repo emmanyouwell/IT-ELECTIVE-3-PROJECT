@@ -12,14 +12,17 @@ import NewSubtopic from '../Components/NewSubtopic';
 const images = [img1, img2];
 import { PencilIcon, TrashIcon } from '@heroicons/react/20/solid';
 import { SHOW_FORM, SHOW_EDIT, DELETE_SUBTOPICS_RESET } from '../constants/subtopicConstants';
-
+import { HIDE_QUIZ_FORM } from '../constants/quizConstants';
+import { DELETE_QUIZ_RESET } from '../constants/quizConstants';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteSubtopic, clearErrors} from '../Actions/subtopicActions';
+import { deleteSubtopic, clearErrors } from '../Actions/subtopicActions';
+import { deleteQuiz, clearErrors as deleteErrors } from '../Actions/quizActions';
 import { getGroupDetails, clearErrors as clearGroupErrors } from '../Actions/groupActions';
 import AddQuizSection from '../Components/AddQuizSection';
 const getColor = (index, colors) => {
     return colors[index % colors.length]; // Cycle through colors array
 };
+import choose from '../assets/image/choose.png'
 const borderColors = ['#264653', '#2a9d8f', '#e9c46a', '#f4a261', '#e76f51']; // Add as many colors as you like
 
 import EditSubtopic from '../Components/EditSubtopic';
@@ -28,11 +31,14 @@ const Files = ({ group }) => {
     const dispatch = useDispatch();
     const editRef = useRef(null);
     const [editId, setEditId] = useState('');
-    const [hideQuiz, setHideQuiz] = useState(true);
+    const { quiz } = useSelector(state => state.quizDetails)
     const { isVisible } = useSelector(state => state.form)
+    const { isVisible: quizVisible } = useSelector(state => state.quizForm)
     const { isVisible: editVisible } = useSelector(state => state.edit)
+
     const { success, loading, error } = useSelector(state => state.subtopics);
-    const {error: deleteError, isDeleted, loading: submitLoading} = useSelector(state => state.subtopic);
+    const { error: deleteError, isDeleted, loading: submitLoading } = useSelector(state => state.subtopic);
+    const {isDeleted:quizDelete, loading: deleteLoading, error: quizDeleteError} = useSelector(state => state.quiz);
     const { groups, loading: groupLoading, error: groupError } = useSelector(state => state.groupDetails);
     // const [isVisible, setIsVisible] = useState(false);
     const toRoman = (num) => {
@@ -42,12 +48,16 @@ const Files = ({ group }) => {
     };
     const handleEdit = (id) => {
         setEditId(id);
-        dispatch({type: SHOW_EDIT});
-        setTimeout(()=>{
-            if (editRef.current){
-                editRef.current.scrollIntoView({behavior: 'smooth'});
+        dispatch({ type: SHOW_EDIT });
+        setTimeout(() => {
+            if (editRef.current) {
+                editRef.current.scrollIntoView({ behavior: 'smooth' });
             }
         }, 100);
+    }
+    const handleQuizDelete = (id) => {
+        dispatch(deleteQuiz(id));
+        
     }
     const handleDelete = (id) => {
         dispatch(deleteSubtopic(id));
@@ -55,24 +65,39 @@ const Files = ({ group }) => {
     const showForm = () => {
         dispatch({ type: SHOW_FORM });
     }
-    
+
     useEffect(() => {
         dispatch(getGroupDetails(group))
-        if (deleteError){
+
+        if (deleteError) {
             dispatch(clearErrors());
         }
-        if (isDeleted){
+        if (quizDeleteError){
+            dispatch(deleteErrors());
+        }
+        if (isDeleted) {
             toast.success('Subtopic deleted successfully');
-            dispatch({type: DELETE_SUBTOPICS_RESET});
+            dispatch({ type: DELETE_SUBTOPICS_RESET });
             dispatch(getGroupDetails(group));
         }
-    }, [dispatch, error, deleteError, isDeleted, group])
+        if (quizDelete){
+            toast.success('Quiz deleted successfully');
+            dispatch({type: DELETE_QUIZ_RESET});
+            dispatch({type: HIDE_QUIZ_FORM});
+            dispatch(getGroupDetails(group));
+        }
+    }, [dispatch, error, deleteError, quizDelete, quizDeleteError, isDeleted, group])
     useEffect(() => {
-        if (!isVisible || !editVisible) {
+        if (!isVisible || !editVisible || !quizVisible) {
             dispatch(getGroupDetails(group));
         }
-        
-    }, [isVisible, editVisible])
+
+    }, [isVisible, editVisible, quizVisible])
+    useEffect(() => {
+        if (groups) {
+            console.log(groups);
+        }
+    }, [groups])
 
     return (
         <>
@@ -82,77 +107,105 @@ const Files = ({ group }) => {
                     <h1 className="text-5xl font-concert font-bold text-center">{groups && groups.topic}</h1>
 
                 </section>
-                {groups && groups.subtopics && groups.subtopics.length > 0 && groups.subtopics.map((item, index) => (
-                    <section
-                        data-aos="fade-up"
-                        className="p-5 sm:p-8 md:p-10 border-8 my-3 rounded-lg"
-                        key={index}
-                        style={{ borderColor: getColor(index, borderColors) }}
-                    >
-                        <div className="flex justify-between items-center mb-6 sm:mb-10">
-                            <p className="text-xl sm:text-2xl">
-                                <strong>Subtopic {toRoman(index + 1)}.</strong> {item.title}
-                            </p>
+                {groups && groups.topic ? (<>
+                    {groups && groups.subtopics && groups.subtopics.length > 0 &&
+                        groups.subtopics.map((item, index) => (
+                            <><section
+                                data-aos="fade-up"
+                                className="p-5 sm:p-8 md:p-10 border-8 my-3 rounded-lg"
+                                key={index}
+                                style={{ borderColor: getColor(index, borderColors) }}
+                            >
+                                <div className="flex justify-between items-center mb-6 sm:mb-10">
+                                    <p className="text-xl sm:text-2xl">
+                                        <strong>Subtopic {toRoman(index + 1)}.</strong> {item.title}
+                                    </p>
 
-                            <div className="flex space-x-4">
-                                <button
-                                    onClick={() => handleEdit(item._id)}
-                                    className="p-4 border-2 border-gray-900 rounded-lg hover:bg-gray-900 hover:text-white transition-all duration-200"
-                                >
-                                    <PencilIcon className="h-6 w-6" /> {/* Edit icon */}
-                                </button>
-                                <button
-                                    onClick={() => handleDelete(item._id)}
-                                    className="p-4 border-2 border-gray-900 rounded-lg hover:bg-gray-900 hover:text-white transition-all duration-200"
-                                >
-                                    <TrashIcon className="h-6 w-6" /> {/* Delete icon */}
-                                </button>
-                            </div>
-                        </div>
+                                    <div className="flex space-x-4">
+                                        <button
+                                            onClick={() => handleEdit(item._id)}
+                                            className="p-4 border-2 border-gray-900 rounded-lg hover:bg-gray-900 hover:text-white transition-all duration-200"
+                                        >
+                                            <PencilIcon className="h-6 w-6" /> {/* Edit icon */}
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(item._id)}
+                                            className="p-4 border-2 border-gray-900 rounded-lg hover:bg-gray-900 hover:text-white transition-all duration-200"
+                                        >
+                                            {submitLoading ? (
+                                                <div className="w-10 h-10 border-4 border-t-gray-900 border-gray-300 rounded-full animate-spin"></div>
+                                            ) : (
+                                                <TrashIcon className="h-6 w-6" />
+                                            )}
 
-
-                        <div className="container flex flex-col md:flex-row justify-between items-center mb-10 mx-auto">
-                            {/* Video */}
-                            <div className="w-full md:w-1/2 flex justify-center p-4 mb-6 md:mb-0">
-                                <div className="border-4 border-yellow-500 rounded-lg overflow-hidden shadow-lg w-full">
-                                    <iframe
-                                        className="w-full h-48 sm:h-64 md:h-72 lg:h-96"
-                                        src={`https://www.youtube.com/embed/${item.videoLink}`}
-                                        frameBorder="0"
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                        allowFullScreen
-                                    ></iframe>
+                                        </button>
+                                    </div>
                                 </div>
+
+
+                                <div className="container flex flex-col md:flex-row justify-between items-center mb-10 mx-auto">
+                                    {/* Video */}
+                                    <div className="w-full md:w-1/2 flex justify-center p-4 mb-6 md:mb-0">
+                                        <div className="border-4 border-yellow-500 rounded-lg overflow-hidden shadow-lg w-full">
+                                            <iframe
+                                                className="w-full h-48 sm:h-64 md:h-72 lg:h-96"
+                                                src={`https://www.youtube.com/embed/${item.videoLink}`}
+                                                frameBorder="0"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                allowFullScreen
+                                            ></iframe>
+                                        </div>
+                                    </div>
+
+                                    {/* Slides */}
+                                    <div className="w-full md:w-1/2">
+                                        <Carousel images={item.images} />
+                                    </div>
+                                </div>
+
+                                {/* Transcript */}
+                                <div className="text-justify p-3">
+                                    <h1 className="font-concert text-2xl sm:text-3xl font-bold mb-3">Transcript</h1>
+                                    <p>{item.transcript}</p>
+                                </div>
+                            </section>
+
+                            </>
+                        ))}
+                    {editVisible && (<div ref={editRef}>
+                        <EditSubtopic subtopicId={editId} /></div>)}
+                    {!isVisible && <AddNewSectionButton onAdd={showForm} />}
+                    {isVisible && (<NewSubtopic groupId={groups._id} />)}
+
+                    {!quizVisible && <AddQuizSection groupId={groups._id} />}
+                    {quizVisible && groups.quiz && groups.quiz.questions && groups.quiz.questions.length > 0 &&
+                        <section className="p-10 border-8 rounded-lg" style={{ borderColor: borderColors[0] }}>
+                            <div className="container flex flex-col justify-center items-center mb-10 mx-auto">
+                                <div className="flex justify-end w-full">
+                                    <div className="flex space-x-4">
+                                      
+                                        <button
+                                            onClick={() => handleQuizDelete(groups.quiz._id)}
+                                            className="p-4 border-2 border-gray-900 rounded-lg hover:bg-gray-900 hover:text-white transition-all duration-200"
+                                        >
+                                            {deleteLoading ? (
+                                                <div className="w-10 h-10 border-4 border-t-gray-900 border-gray-300 rounded-full animate-spin"></div>
+                                            ) : (
+                                                <TrashIcon className="h-6 w-6" />
+                                            )}
+
+                                        </button>
+                                    </div>
+                                </div>
+                                <h1 className="font-concert  text-3xl font-bold mb-3">Quiz</h1>
+
+
+                                <FlipCards questions={groups.quiz.questions} />
                             </div>
+                        </section>}
+                </>) : (<><div className="flex justify-center items-center h-[90%]"><img src={choose} /></div></>)}
 
-                            {/* Slides */}
-                            <div className="w-full md:w-1/2">
-                                <Carousel images={item.images} />
-                            </div>
-                        </div>
 
-                        {/* Transcript */}
-                        <div className="text-justify p-3">
-                            <h1 className="font-concert text-2xl sm:text-3xl font-bold mb-3">Transcript</h1>
-                            <p>{item.transcript}</p>
-                        </div>
-                    </section>
-                   
-
-                ))}
-                 {editVisible && (<div ref={editRef}>
-                   <EditSubtopic subtopicId={editId} /></div>)}
-                {!isVisible && <AddNewSectionButton onAdd={showForm} />}
-                {isVisible && (<NewSubtopic groupId={groups._id} />)}
-
-                {hideQuiz && <AddQuizSection />}
-                {!hideQuiz &&
-                    <section className="p-10 border-8 rounded-lg" style={{ borderColor: borderColors[0] }}>
-                        <div className="container flex flex-col justify-center items-center mb-10 mx-auto">
-                            <h1 className="font-concert text-3xl font-bold mb-3">Quiz</h1>
-                            <FlipCards questions={questions} />
-                        </div>
-                    </section>}
             </div>
 
 

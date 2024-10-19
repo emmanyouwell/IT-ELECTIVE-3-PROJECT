@@ -1,27 +1,42 @@
 const Group = require('../models/groups');
-
+const fs = require('fs');
+const path = require('path');
 const Quiz = require('../models/quiz');
+const cloudinary = require('cloudinary');
 exports.createQuiz = async (req, res, next) => {
     try {
-        const groupId = req.params.groupId;
-        const filePath = path.join(__dirname, '../uploads', req.file.filename);
-        const fileContent = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+        const groupId = req.params.id;
+
+        // Upload file to Cloudinary
+        const result = await cloudinary.v2.uploader.upload(req.file.path, {
+            resource_type: 'raw', // Ensure the file is treated as a raw file
+            folder: 'IT_ELECTIVE_3/quizzes', // Optional: specify a folder in Cloudinary
+        });
+
+        // Get the URL of the uploaded file
+        const fileUrl = result.secure_url;
+
+        // Fetch the file content from the URL
+        const response = await fetch(fileUrl);
+        const fileContent = await response.json();
 
         // Validate and save quizzes to the database
         if (Array.isArray(fileContent)) {
             const quiz = new Quiz({ questions: fileContent });
             const savedQuiz = await quiz.save();
 
-            // Find the group by ID and update it with the quiz ObjectId
-            const group = await Group.findById(groupId);
-            if (!group) {
+            // Find the group by ID and update it, adding the quiz ObjectId to the quiz field
+            const updatedGroup = await Group.findByIdAndUpdate(
+                groupId,
+                { $set: { quiz: savedQuiz._id } }, // This ensures the quiz field is added or updated
+                { new: true, upsert: true } // `new: true` returns the updated document, `upsert: true` creates it if it doesn't exist
+            );
+
+            if (!updatedGroup) {
                 return res.status(400).json({ message: `Group not found with id: ${groupId}` });
             }
 
-            group.quiz = savedQuiz._id;
-            await group.save();
-
-            res.status(201).json({ message: 'Quiz uploaded and group updated successfully', quiz: savedQuiz });
+            res.status(201).json({ message: 'Quiz uploaded and group updated successfully', quiz: savedQuiz, success:true});
         } else {
             res.status(400).json({ message: 'Invalid JSON format' });
         }

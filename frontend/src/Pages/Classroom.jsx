@@ -30,7 +30,7 @@ const Classroom = () => {
     }, [isSideNavVisible]);
 
     return (
-        <div className="flex  p-4 relative">
+        <div className="flex relative">
             <button
                 className="md:hidden p-2 text-blue-500 absolute top-5 left-5"
                 onClick={toggleSideNav}

@@ -19,11 +19,14 @@ const FlipCards = ({ questions }) => {
 
                 <div className="card mb-5">
                     <div className="card-inner">
-                        <div className="card-front flex items-center justify-center text-white  border-4 rounded-lg p-5" style={{backgroundColor: getColor(currentIndex, cardColors), borderColor: getColor(currentIndex, cardColors)}}>
-                            <p className="font-concert text-center text-5xl">{questions[currentIndex].q}</p>
+                        <div className="card-front flex flex-col items-center justify-center text-white  border-4 rounded-lg p-5" style={{backgroundColor: getColor(currentIndex, cardColors), borderColor: getColor(currentIndex, cardColors)}}>
+                            <p className="font-concert text-center text-xl">{questions[currentIndex].q}</p>
+                            <p className="font-concert text-center text-xl">{questions[currentIndex].a}</p>
+                            <p className="font-concert text-center text-xl">{questions[currentIndex].b}</p>
+                            <p className="font-concert text-center text-xl">{questions[currentIndex].c}</p>
                         </div>
                         <div className="card-back flex items-center justify-center bg-green-500 text-white border-green-500 border-4 rounded-lg p-5">
-                            <p className="font-concert text-center text-5xl">{questions[currentIndex].a}</p>
+                            <p className="font-concert text-center text-5xl">{questions[currentIndex].ans}</p>
                         </div>
                     </div>
                 </div>
