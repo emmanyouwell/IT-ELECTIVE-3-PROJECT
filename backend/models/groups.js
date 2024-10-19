@@ -7,6 +7,10 @@ const groupsSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Subtopic' // Reference to the Subtopic model
     }],
+    quiz: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Quiz' // Reference to the Quiz model
+    }],
     createdAt: {
         type: Date,
         default: Date.now

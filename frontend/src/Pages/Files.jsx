@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import Cards from '../Components/Cards';
 import SideNav from '../Components/SideNav';
 import Carousel from '../Components/Carousel';
@@ -10,9 +10,11 @@ import data from '../data/data.json';
 import AddNewSectionButton from '../Components/AddNewSectionButton';
 import NewSubtopic from '../Components/NewSubtopic';
 const images = [img1, img2];
-import { NEW_SUBTOPICS_REQUEST } from '../constants/subtopicConstants';
+import { PencilIcon, TrashIcon } from '@heroicons/react/20/solid';
+import { SHOW_FORM, SHOW_EDIT, DELETE_SUBTOPICS_RESET } from '../constants/subtopicConstants';
+
 import { useDispatch, useSelector } from 'react-redux';
-import { getSubtopics, clearErrors } from '../Actions/subtopicActions';
+import { deleteSubtopic, clearErrors} from '../Actions/subtopicActions';
 import { getGroupDetails, clearErrors as clearGroupErrors } from '../Actions/groupActions';
 import AddQuizSection from '../Components/AddQuizSection';
 const getColor = (index, colors) => {
@@ -20,10 +22,17 @@ const getColor = (index, colors) => {
 };
 const borderColors = ['#264653', '#2a9d8f', '#e9c46a', '#f4a261', '#e76f51']; // Add as many colors as you like
 
+import EditSubtopic from '../Components/EditSubtopic';
+import { toast } from 'react-toastify';
 const Files = ({ group }) => {
     const dispatch = useDispatch();
-    const { isVisible } = useSelector(state => state.newSubtopics)
+    const editRef = useRef(null);
+    const [editId, setEditId] = useState('');
+    const [hideQuiz, setHideQuiz] = useState(true);
+    const { isVisible } = useSelector(state => state.form)
+    const { isVisible: editVisible } = useSelector(state => state.edit)
     const { success, loading, error } = useSelector(state => state.subtopics);
+    const {error: deleteError, isDeleted, loading: submitLoading} = useSelector(state => state.subtopic);
     const { groups, loading: groupLoading, error: groupError } = useSelector(state => state.groupDetails);
     // const [isVisible, setIsVisible] = useState(false);
     const toRoman = (num) => {
@@ -31,18 +40,40 @@ const Files = ({ group }) => {
 
         return romanNumerals[num - 1]; // Index starts at 0, so subtract 1
     };
-    const showForm = () => {
-        dispatch({ type: NEW_SUBTOPICS_REQUEST });
+    const handleEdit = (id) => {
+        setEditId(id);
+        dispatch({type: SHOW_EDIT});
+        setTimeout(()=>{
+            if (editRef.current){
+                editRef.current.scrollIntoView({behavior: 'smooth'});
+            }
+        }, 100);
     }
+    const handleDelete = (id) => {
+        dispatch(deleteSubtopic(id));
+    }
+    const showForm = () => {
+        dispatch({ type: SHOW_FORM });
+    }
+    
     useEffect(() => {
         dispatch(getGroupDetails(group))
-
-    }, [dispatch, error, group])
-    useEffect(() => {
-        if (groups) {
-            console.log(groups);
+        if (deleteError){
+            dispatch(clearErrors());
         }
-    }, [groups])
+        if (isDeleted){
+            toast.success('Subtopic deleted successfully');
+            dispatch({type: DELETE_SUBTOPICS_RESET});
+            dispatch(getGroupDetails(group));
+        }
+    }, [dispatch, error, deleteError, isDeleted, group])
+    useEffect(() => {
+        if (!isVisible || !editVisible) {
+            dispatch(getGroupDetails(group));
+        }
+        
+    }, [isVisible, editVisible])
+
     return (
         <>
             <div className="flex-grow h-full p-5">
@@ -58,9 +89,27 @@ const Files = ({ group }) => {
                         key={index}
                         style={{ borderColor: getColor(index, borderColors) }}
                     >
-                        <p className="text-xl sm:text-2xl mb-6 sm:mb-10">
-                            <strong>Subtopic {toRoman(index + 1)}.</strong> {item.title}
-                        </p>
+                        <div className="flex justify-between items-center mb-6 sm:mb-10">
+                            <p className="text-xl sm:text-2xl">
+                                <strong>Subtopic {toRoman(index + 1)}.</strong> {item.title}
+                            </p>
+
+                            <div className="flex space-x-4">
+                                <button
+                                    onClick={() => handleEdit(item._id)}
+                                    className="p-4 border-2 border-gray-900 rounded-lg hover:bg-gray-900 hover:text-white transition-all duration-200"
+                                >
+                                    <PencilIcon className="h-6 w-6" /> {/* Edit icon */}
+                                </button>
+                                <button
+                                    onClick={() => handleDelete(item._id)}
+                                    className="p-4 border-2 border-gray-900 rounded-lg hover:bg-gray-900 hover:text-white transition-all duration-200"
+                                >
+                                    <TrashIcon className="h-6 w-6" /> {/* Delete icon */}
+                                </button>
+                            </div>
+                        </div>
+
 
                         <div className="container flex flex-col md:flex-row justify-between items-center mb-10 mx-auto">
                             {/* Video */}
@@ -88,20 +137,22 @@ const Files = ({ group }) => {
                             <p>{item.transcript}</p>
                         </div>
                     </section>
+                   
 
                 ))}
-
+                 {editVisible && (<div ref={editRef}>
+                   <EditSubtopic subtopicId={editId} /></div>)}
                 {!isVisible && <AddNewSectionButton onAdd={showForm} />}
-                {isVisible && (<NewSubtopic />)}
+                {isVisible && (<NewSubtopic groupId={groups._id} />)}
 
-                <AddQuizSection/>
-                {false &&
-                <section className="p-10 border-8 rounded-lg" style={{ borderColor: borderColors[0] }}>
-                    <div className="container flex flex-col justify-center items-center mb-10 mx-auto">
-                        <h1 className="font-concert text-3xl font-bold mb-3">Quiz</h1>
-                        <FlipCards questions={questions} />
-                    </div>
-                </section>}
+                {hideQuiz && <AddQuizSection />}
+                {!hideQuiz &&
+                    <section className="p-10 border-8 rounded-lg" style={{ borderColor: borderColors[0] }}>
+                        <div className="container flex flex-col justify-center items-center mb-10 mx-auto">
+                            <h1 className="font-concert text-3xl font-bold mb-3">Quiz</h1>
+                            <FlipCards questions={questions} />
+                        </div>
+                    </section>}
             </div>
 
 

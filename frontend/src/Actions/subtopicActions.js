@@ -20,6 +20,8 @@ import {
     UPDATE_SUBTOPICS_SUCCESS,
     UPDATE_SUBTOPICS_RESET,
     UPDATE_SUBTOPICS_FAIL,
+    SHOW_FORM,
+    HIDE_FORM,
     CLEAR_ERRORS,
 
 } from '../constants/subtopicConstants';
@@ -29,17 +31,17 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 
-export const createSubtopics = (subtopicData) => async (dispatch) => {
+export const createSubtopics = (subtopicData, groupId) => async (dispatch) => {
     // console.log("dispatched")
     try {
         dispatch({type: NEW_SUBTOPICS_REQUEST})
         const config = {
-            headers: {       
+            headers: {          
                 // 'Authorization': `Bearer ${getToken()}`
             }
         }
         
-        const { data } = await axios.post(`${process.env.REACT_APP_API}/api/v1/subtopic/new`, subtopicData, config)
+        const { data } = await axios.post(`${process.env.REACT_APP_API}/api/v1/group/${groupId}/subtopic/new`, subtopicData, config)
         dispatch({
             type: NEW_SUBTOPICS_SUCCESS,
             payload: data
@@ -105,12 +107,14 @@ export const updateSubtopic = (id, subtopicData) => async (dispatch) => {
             }
             
         }
+        console.log('subtopic data: ', subtopicData.getAll('images'))
         const { data } = await axios.put(`${process.env.REACT_APP_API}/api/v1/subtopic/${id}`, subtopicData, config)
         dispatch({
             type: UPDATE_SUBTOPICS_SUCCESS,
             payload: data.success
         })
     } catch (error) {
+        console.log(error);
         dispatch({
             type: UPDATE_SUBTOPICS_FAIL,
             payload: error.response.data.message

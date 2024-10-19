@@ -20,10 +20,47 @@ import {
     UPDATE_SUBTOPICS_SUCCESS,
     UPDATE_SUBTOPICS_RESET,
     UPDATE_SUBTOPICS_FAIL,
+    SHOW_FORM,
+    HIDE_FORM,
+    SHOW_EDIT,
+    HIDE_EDIT,
     CLEAR_ERRORS,
 
 } from '../constants/subtopicConstants';
 
+export const showFormReducer = (state = {isVisible: false}, action) => {
+    switch (action.type) {
+        case SHOW_FORM:
+            return {
+                ...state,
+                isVisible: true
+            }
+        case HIDE_FORM:
+            return {
+                ...state,
+                isVisible: false
+            }
+        default:
+            return state;
+    }
+}
+
+export const showEditReducer = (state = {isVisible: false}, action) => {
+    switch (action.type) {
+        case SHOW_EDIT:
+            return {
+                ...state,
+                isVisible: true
+            }
+        case HIDE_EDIT:
+            return {
+                ...state,
+                isVisible: false
+            }
+        default:
+            return state;
+    }
+}
 export const subtopicsReducer = (state = { subtopics: [] }, action) => {
     switch (action.type) {
         case ALL_SUBTOPICS_REQUEST:
@@ -68,7 +105,8 @@ export const subtopicsDetailsReducer = (state = { subtopics: {} }, action) => {
         case SUBTOPICS_DETAILS_REQUEST:
             return {
                 ...state,
-                loading: true
+                loading: true,
+                
             }
 
         case SUBTOPICS_DETAILS_SUCCESS:
@@ -83,7 +121,7 @@ export const subtopicsDetailsReducer = (state = { subtopics: {} }, action) => {
                 ...state,
                 error: action.payload
             }
-
+        
         case CLEAR_ERRORS:
             return {
                 ...state,
@@ -100,13 +138,13 @@ export const newSubtopicsReducer = (state = { subtopics: {} }, action) => {
             return {
                 ...state,
                 loading: true,
-                isVisible: true
+                
             }
         case NEW_SUBTOPICS_SUCCESS:
             return {
                 ...state,
                 loading: false,
-                isVisible: false,
+                
                 success: action.payload.success,
                 subtopics: action.payload.newSubtopic
             }
@@ -119,7 +157,7 @@ export const newSubtopicsReducer = (state = { subtopics: {} }, action) => {
             return {
                 ...state,
                 success: false,
-                isVisible: false
+                
             }
         case CLEAR_ERRORS:
             return {
@@ -135,10 +173,15 @@ export const newSubtopicsReducer = (state = { subtopics: {} }, action) => {
 export const subtopicReducer = (state = {}, action) => {
     switch (action.type) {
         case DELETE_SUBTOPICS_REQUEST:
+            return{
+                ...state,
+                loading:true
+            }
         case UPDATE_SUBTOPICS_REQUEST:
             return {
                 ...state,
-                loading: true
+                loading: true,
+                isVisible: true,
             }
         case DELETE_SUBTOPICS_SUCCESS:
             return {
@@ -167,7 +210,8 @@ export const subtopicReducer = (state = {}, action) => {
         case UPDATE_SUBTOPICS_RESET:
             return {
                 ...state,
-                isUpdated: false
+                isUpdated: false,
+                isVisible: false
             }
         case CLEAR_ERRORS:
             return {

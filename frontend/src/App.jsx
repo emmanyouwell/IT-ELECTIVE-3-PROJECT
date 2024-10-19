@@ -10,7 +10,7 @@ import {ToastContainer} from 'react-toastify';
 function App() {
   useEffect(() => {
     AOS.init({
-      duration: 1000, // Duration of animation (in ms)
+      duration: 500, // Duration of animation (in ms)
       easing: 'ease-in-out', // Easing function for animation
       once: false, // Whether animation should happen only once - while scrolling down
       mirror: true, // Whether elements should animate out while scrolling past them

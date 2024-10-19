@@ -1,7 +1,7 @@
 import { legacy_createStore as createStore, combineReducers, applyMiddleware } from 'redux';
 import {thunk} from 'redux-thunk';
 import { groupReducer, groupsDetailsReducer, groupsReducer, newGroupsReducer } from './Reducers/groupReducer';
-import { newSubtopicsReducer, subtopicReducer, subtopicsDetailsReducer, subtopicsReducer } from './Reducers/subtopicReducer';
+import { newSubtopicsReducer, showEditReducer, showFormReducer, subtopicReducer, subtopicsDetailsReducer, subtopicsReducer } from './Reducers/subtopicReducer';
 
 
 const reducer = combineReducers({
@@ -13,7 +13,8 @@ const reducer = combineReducers({
     subtopicsDetails: subtopicsDetailsReducer,
     newSubtopics: newSubtopicsReducer,
     subtopic: subtopicReducer,
-
+    form: showFormReducer,
+    edit: showEditReducer
 })
 
 let initialState = {

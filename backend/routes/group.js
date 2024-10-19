@@ -9,4 +9,5 @@ router.get('/groups', getGroups);
 router.get('/group/:id', getSingleGroup);
 router.put('/group/:id', updateGroup);
 router.delete('/group/:id', deleteGroup);
+
 module.exports = router;
