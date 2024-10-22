@@ -8,6 +8,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import {ToastContainer} from 'react-toastify';
 import NotFoundPage from "./NotFoundPage";
+import ConverterSection from "./Components/ConverterSection";
 function App() {
   useEffect(() => {
     AOS.init({
@@ -23,6 +24,7 @@ function App() {
         <Route path="/" element={<Home/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/classroom" element={<Classroom/>}/>
+        <Route path="/converter" element={<ConverterSection/>}/>
         <Route path="*" element={<NotFoundPage/>}/>
       </Routes>
       <ToastContainer position="bottom-right"/>
