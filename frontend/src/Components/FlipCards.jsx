@@ -24,6 +24,7 @@ const FlipCards = ({ questions }) => {
                             <p className="font-concert text-center text-xl">{questions[currentIndex].a}</p>
                             <p className="font-concert text-center text-xl">{questions[currentIndex].b}</p>
                             <p className="font-concert text-center text-xl">{questions[currentIndex].c}</p>
+                            <p className="font-concert text-center text-xl">{questions[currentIndex].d}</p>
                         </div>
                         <div className="card-back flex items-center justify-center bg-green-500 text-white border-green-500 border-4 rounded-lg p-5">
                             <p className="font-concert text-center text-5xl">{questions[currentIndex].ans}</p>

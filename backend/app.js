@@ -8,7 +8,7 @@ const subtopic = require('./routes/subtopic');
 const quiz = require('./routes/quiz');
 // CORS configuration
 const corsOptions = {
-    origin: 'https://it-elective-3-project.vercel.app', // Allow only your Vercel frontend
+    origin: ['https://it-elective-3-project.vercel.app', 'http://localhost:5173'], // Allow only your Vercel frontend
     methods: 'GET,POST,PUT,DELETE', // Allow specific methods if needed
     credentials: true, // If your frontend requires credentials (e.g., cookies)
 };

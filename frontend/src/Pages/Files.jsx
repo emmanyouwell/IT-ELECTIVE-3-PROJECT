@@ -203,7 +203,7 @@ const Files = ({ group }) => {
                                 <FlipCards questions={groups.quiz.questions} />
                             </div>
                         </section>}
-                </>) : (<><div className="flex justify-center items-center h-[90%]"><img src={choose} /></div></>)}
+                </>) : (<><div className="flex justify-center items-center h-[90%]"><img src={choose} alt="choose group"/></div></>)}
 
 
             </div>

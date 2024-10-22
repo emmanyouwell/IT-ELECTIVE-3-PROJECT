@@ -7,6 +7,7 @@ const quizSchema = new mongoose.Schema({
         a: { type: String },
         b: { type: String },
         c: { type: String },
+        d: { type: String },
         ans: { type: String, required: true }
     }],
     createdAt: {
