@@ -21,6 +21,8 @@ import Headers from "../Components/Headers";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Loader from '../Components/Loader';
+import Rubiks from '../Components/Rubiks';
+import DotLoader from '../Components/DotLoader';
 
 const Register = () => {
     const dispatch = useDispatch();
@@ -76,7 +78,7 @@ const Register = () => {
     return (
         <>
             <Headers />
-            {registerLoading ? <Loader /> : (<section
+            {registerLoading ? <DotLoader /> : (<section
                 className="container flex flex-col lg:flex-row justify-between items-center mx-auto p-5 sm:p-8 md:p-10 border-4 border-gray-300 my-10 rounded-lg"
             >
 

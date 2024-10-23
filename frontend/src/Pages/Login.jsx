@@ -17,6 +17,8 @@ import {
     Typography,
 } from "@material-tailwind/react";
 import Loader from '../Components/Loader';
+import Rubiks from '../Components/Rubiks';
+import DotLoader from '../Components/DotLoader';
 
 
 
@@ -67,7 +69,7 @@ const Login = () => {
     return (
         <>
             <Headers />
-            {loading ? <Loader /> : (<section
+            {loading ? <div className="container flex justify-center items-center mx-auto w-full h-screen"><DotLoader /></div> : (<section
                 className="container mx-auto flex flex-col lg:flex-row justify-between items-center p-5 sm:p-8 md:p-10 border-4 border-gray-300 my-10 rounded-lg"
             >
 
