@@ -35,10 +35,10 @@ const Files = ({ group }) => {
     const { isVisible } = useSelector(state => state.form)
     const { isVisible: quizVisible } = useSelector(state => state.quizForm)
     const { isVisible: editVisible } = useSelector(state => state.edit)
-    const {user} = useSelector(state => state.auth)
+    const { user } = useSelector(state => state.auth)
     const { success, loading, error } = useSelector(state => state.subtopics);
     const { error: deleteError, isDeleted, loading: submitLoading } = useSelector(state => state.subtopic);
-    const {isDeleted:quizDelete, loading: deleteLoading, error: quizDeleteError} = useSelector(state => state.quiz);
+    const { isDeleted: quizDelete, loading: deleteLoading, error: quizDeleteError } = useSelector(state => state.quiz);
     const { groups, loading: groupLoading, error: groupError } = useSelector(state => state.groupDetails);
     // const [isVisible, setIsVisible] = useState(false);
     const toRoman = (num) => {
@@ -57,7 +57,7 @@ const Files = ({ group }) => {
     }
     const handleQuizDelete = (id) => {
         dispatch(deleteQuiz(id));
-        
+
     }
     const handleDelete = (id) => {
         dispatch(deleteSubtopic(id));
@@ -67,12 +67,15 @@ const Files = ({ group }) => {
     }
 
     useEffect(() => {
-        dispatch(getGroupDetails(group))
+        if (group) {
+            dispatch(getGroupDetails(group))
+        }
+
 
         if (deleteError) {
             dispatch(clearErrors());
         }
-        if (quizDeleteError){
+        if (quizDeleteError) {
             dispatch(deleteErrors());
         }
         if (isDeleted) {
@@ -80,24 +83,19 @@ const Files = ({ group }) => {
             dispatch({ type: DELETE_SUBTOPICS_RESET });
             dispatch(getGroupDetails(group));
         }
-        if (quizDelete){
+        if (quizDelete) {
             toast.success('Quiz deleted successfully');
-            dispatch({type: DELETE_QUIZ_RESET});
-            dispatch({type: HIDE_QUIZ_FORM});
+            dispatch({ type: DELETE_QUIZ_RESET });
+            dispatch({ type: HIDE_QUIZ_FORM });
             dispatch(getGroupDetails(group));
         }
     }, [dispatch, error, deleteError, quizDelete, quizDeleteError, isDeleted, group])
     useEffect(() => {
-        if (!isVisible || !editVisible || !quizVisible) {
+        if (group && (!isVisible || !editVisible || !quizVisible)) {
             dispatch(getGroupDetails(group));
         }
 
     }, [isVisible, editVisible, quizVisible])
-    useEffect(() => {
-        if (groups) {
-            console.log(groups);
-        }
-    }, [groups])
 
     return (
         <>
@@ -120,8 +118,7 @@ const Files = ({ group }) => {
                                     <p className="text-xl sm:text-2xl">
                                         <strong>Subtopic {toRoman(index + 1)}.</strong> {item.title}
                                     </p>
-
-                                    <div className="flex space-x-4">
+                                    {user.groupID._id === groups._id && (<div className="flex space-x-4">
                                         <button
                                             onClick={() => handleEdit(item._id)}
                                             className="p-4 border-2 border-gray-900 rounded-lg hover:bg-gray-900 hover:text-white transition-all duration-200"
@@ -139,7 +136,8 @@ const Files = ({ group }) => {
                                             )}
 
                                         </button>
-                                    </div>
+                                    </div>)}
+
                                 </div>
 
 
@@ -172,40 +170,46 @@ const Files = ({ group }) => {
 
                             </>
                         ))}
-                        {user.groupID._id === groups._id ? (<>
-                            {editVisible && (<div ref={editRef}>
-                        <EditSubtopic subtopicId={editId} /></div>)}
-                    {!isVisible && <AddNewSectionButton onAdd={showForm} />}
-                    {isVisible && (<NewSubtopic groupId={groups._id} />)}
+                    {user.groupID._id === groups._id ? (<>
+                        {editVisible && (<div ref={editRef}>
+                            <EditSubtopic subtopicId={editId} /></div>)}
+                        {!isVisible && <AddNewSectionButton onAdd={showForm} />}
+                        {isVisible && (<NewSubtopic groupId={groups._id} />)}
 
-                    {!quizVisible && <AddQuizSection groupId={groups._id} />}
-                    {quizVisible && groups.quiz && groups.quiz.questions && groups.quiz.questions.length > 0 &&
-                        <section className="p-10 border-8 rounded-lg" style={{ borderColor: borderColors[0] }}>
-                            <div className="container flex flex-col justify-center items-center mb-10 mx-auto">
-                                <div className="flex justify-end w-full">
-                                    <div className="flex space-x-4">
-                                      
-                                        <button
-                                            onClick={() => handleQuizDelete(groups.quiz._id)}
-                                            className="p-4 border-2 border-gray-900 rounded-lg hover:bg-gray-900 hover:text-white transition-all duration-200"
-                                        >
-                                            {deleteLoading ? (
-                                                <div className="w-10 h-10 border-4 border-t-gray-900 border-gray-300 rounded-full animate-spin"></div>
-                                            ) : (
-                                                <TrashIcon className="h-6 w-6" />
-                                            )}
+                        {!groups.quiz && <AddQuizSection groupId={groups._id} />}
+                        {groups.quiz && groups.quiz.questions && groups.quiz.questions.length > 0 &&
+                            <section className="p-10 border-8 rounded-lg" style={{ borderColor: borderColors[0] }}>
+                                <div className="container flex flex-col justify-center items-center mb-10 mx-auto">
+                                    <div className="flex justify-end w-full">
+                                        {user.groupID._id === groups._id && (<div className="flex space-x-4">
 
-                                        </button>
+                                            <button
+                                                onClick={() => handleQuizDelete(groups.quiz._id)}
+                                                className="p-4 border-2 border-gray-900 rounded-lg hover:bg-gray-900 hover:text-white transition-all duration-200"
+                                            >
+                                                {deleteLoading ? (
+                                                    <div className="w-10 h-10 border-4 border-t-gray-900 border-gray-300 rounded-full animate-spin"></div>
+                                                ) : (
+                                                    <TrashIcon className="h-6 w-6" />
+                                                )}
+
+                                            </button>
+                                        </div>)}
+
                                     </div>
+                                    <h1 className="font-concert  text-3xl font-bold mb-3">Quiz</h1>
+                                    <FlipCards questions={groups.quiz.questions} />
                                 </div>
-                                <h1 className="font-concert  text-3xl font-bold mb-3">Quiz</h1>
+                            </section>}</>) : <>{groups.subtopics.length === 0 && <div className="container flex flex-col justify-center items-center mb-10 mx-auto">No subtopics available</div>}</>}
+                    {user.groupID._id !== groups._id && (<>
+                        {groups.quiz && groups.quiz.questions ? (
+                                <section className="p-10 border-8 rounded-lg"><div className="container flex flex-col justify-center items-center mb-10 mx-auto">
+                                    <h1 className="font-concert  text-3xl font-bold mb-3">Quiz</h1>
 
+                                    <FlipCards questions={groups.quiz.questions} />
+                                </div></section>) : <div className="container flex flex-col justify-center items-center mb-10 mx-auto">No quiz available</div>}</>)}
 
-                                <FlipCards questions={groups.quiz.questions} />
-                            </div>
-                        </section>}</>) : null}
-                   
-                </>) : (<><div className="flex justify-center items-center h-[90%]"><img src={choose} alt="choose group"/></div></>)}
+                </>) : (<><div className="flex justify-center items-center h-[90%]"><img src={choose} alt="choose group" /></div></>)}
 
 
             </div>

@@ -9,6 +9,7 @@ import {
     Chip,
 } from "@material-tailwind/react";
 import { getGroups, getGroupDetails, clearErrors } from '../Actions/groupActions';
+import { getUser } from '../Actions/authActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom'
 const SideNav = ({ setGroup }) => {
@@ -43,19 +44,16 @@ const SideNav = ({ setGroup }) => {
         if (error) {
             dispatch(clearErrors());
         }
-        if (allErrors){
+        if (allErrors) {
             dispatch(clearErrors());
         }
-      
-        
+
+
         dispatch(getGroups());
+        dispatch(getUser());
     }, [dispatch, error, allErrors])
 
-    useEffect(() => {
-        if (user) {
-            console.log('user: ', user);
-        }
-    }, [user])
+   
 
     return (
 
@@ -69,10 +67,10 @@ const SideNav = ({ setGroup }) => {
                 </Link>
             </div>
             <List className="h-full">
-                <ListItem
-                    key={user.groupID._id}
-                    onClick={() => handleTabClick(user.groupID._id, 0)}
+                {user && user.groupID && (<ListItem
                     
+                    onClick={() => handleTabClick(user.groupID._id, 0)}
+
                     className="cursor-pointer p-2 rounded transition-colors"
                 >
                     <ListItemPrefix>
@@ -81,12 +79,13 @@ const SideNav = ({ setGroup }) => {
                         </svg>
                     </ListItemPrefix>
                     GROUP {user && user.groupID.group}
-                </ListItem>
+                </ListItem>)}
+
                 <hr className="my-2 border-blue-gray-50" />
-                {allGroups && allGroups.map((group, index) =>( <ListItem
+                {allGroups && allGroups.map((group, index) => (<ListItem
                     key={group._id}
                     onClick={() => handleTabClick(group._id)}
-                    
+
                     className="cursor-pointer p-2 rounded transition-colors"
                 >
                     <ListItemPrefix>

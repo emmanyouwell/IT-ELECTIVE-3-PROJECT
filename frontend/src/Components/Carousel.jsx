@@ -61,7 +61,7 @@ const CarouselComponent = ({ images }) => {
         key={index}
         src={image.url ? image.url : image}
         alt="image 1"
-        className="h-[400px] w-full object-contain xl:object-cover"
+        className="h-[400px] w-full object-contain"
       />))}
 
     </Carousel>
