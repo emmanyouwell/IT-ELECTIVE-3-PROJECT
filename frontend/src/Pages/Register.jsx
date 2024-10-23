@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getGroups, clearErrors } from '../Actions/groupActions';
 import { register, clearErrors as registerClearErrors } from '../Actions/authActions';
-const images = ['https://www.pngkey.com/png/detail/233-2332677_image-500580-placeholder-transparent.png', 'https://www.pngkey.com/png/detail/233-2332677_image-500580-placeholder-transparent.png', 'https://www.pngkey.com/png/detail/233-2332677_image-500580-placeholder-transparent.png'];
+const images = 'https://images.unsplash.com/photo-1499673610122-01c7122c5dcb?q=80&w=1927&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
 import { useNavigate, Link } from 'react-router-dom';
 // @material-tailwind/react
 import {
@@ -20,11 +20,12 @@ import {
 import Headers from "../Components/Headers";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import Loader from '../Components/Loader';
 
 const Register = () => {
     const dispatch = useDispatch();
     const { groups, loading, error } = useSelector(state => state.groups);
-    const {isRegistered, loading: registerLoading, error: registerError} = useSelector(state => state.auth);
+    const { isRegistered, loading: registerLoading, error: registerError } = useSelector(state => state.auth);
     // Yup validation schema
     const validationSchema = Yup.object({
         name: Yup.string()
@@ -65,7 +66,7 @@ const Register = () => {
         if (isRegistered) {
             navigate('/email-activation');
         }
-        if (registerError){
+        if (registerError) {
             dispatch(registerClearErrors());
         }
         if (error) {
@@ -75,8 +76,8 @@ const Register = () => {
     return (
         <>
             <Headers />
-            <section
-                className="container flex justify-between mx-auto p-5 sm:p-8 md:p-10 border-4 border-gray-300 my-10 rounded-lg"
+            {registerLoading ? <Loader /> : (<section
+                className="container flex flex-col lg:flex-row justify-between items-center mx-auto p-5 sm:p-8 md:p-10 border-4 border-gray-300 my-10 rounded-lg"
             >
 
                 <Card color="transparent" shadow={false}>
@@ -160,12 +161,12 @@ const Register = () => {
                                 size="lg"
                                 name="groupId"
                                 value={formik.values.groupId}  // Ensure Formik's value is passed here
-                                onChange={(value)=>{
-                                   formik.values.groupId = value  // Set Formik's value to the selected value
-                                   console.log("groupId: ", formik.values.groupId);
+                                onChange={(value) => {
+                                    formik.values.groupId = value  // Set Formik's value to the selected value
+                                    console.log("groupId: ", formik.values.groupId);
                                 }}
                                 // onBlur={formik.handleBlur}  // Handle blur event to mark as touched
-                              
+
                                 className="border-t-blue-gray-200 aria-[expanded=true]:border-t-primary"
                             >
                                 {groups.map(group => (
@@ -175,11 +176,11 @@ const Register = () => {
                                 ))}
                             </Select>
                             {formik.touched.groupId && formik.errors.groupId && (
-                                 <div className="text-red-500 text-sm mt-3">{formik.errors.groupId}</div>
+                                <div className="text-red-500 text-sm mt-3">{formik.errors.groupId}</div>
                             )}
                         </div>
 
-                       
+
                         <Button className="mt-6" fullWidth type="submit">
                             sign up
                         </Button>
@@ -191,8 +192,11 @@ const Register = () => {
                         </Typography>
                     </form>
                 </Card>
-                <img src={images} alt="image"/>
-            </section>
+                <div className="container mx-auto px-4">
+                    <img src={images} className="w-full max-w-full h-auto hidden lg:inline-block" alt="image" />
+                </div>
+            </section>)}
+
         </>
     );
 }

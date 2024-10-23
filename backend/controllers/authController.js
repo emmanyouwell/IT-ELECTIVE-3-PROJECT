@@ -7,10 +7,7 @@ const Group = require('../models/groups');
 
 exports.registerUser = async (req, res, next) => {
     const { name, email, password, groupId } = req.body;
-    console.log(name)
-    console.log(email)
-    console.log(password)
-    console.log(groupId)
+
     const userExists = await User.findOne({ email: req.body.email });
     if (userExists) {
         return res.status(400).json({
@@ -28,7 +25,7 @@ exports.registerUser = async (req, res, next) => {
         name,
         email,
         password,
-        group: groupId,
+        groupID: groupId,
     })
     if (!user) {
         return res.status(400).json({
@@ -38,12 +35,15 @@ exports.registerUser = async (req, res, next) => {
     }
     const confirmationToken = user.getConfirmEmailToken();
     await user.save({ validateBeforeSave: false });
+    console.log(process.env.SMTP_HOST)
     let confirmEmailLink = ''
-    if (process.env.SMTP_HOST === 'smpt.gmail.com') {
+    if (process.env.SMTP_HOST === 'smtp.gmail.com') {
         confirmEmailLink = `${req.protocol}://it-elective-3-project.vercel.app/confirm/${confirmationToken}`
+        
     }
     else {
         confirmEmailLink = `${req.protocol}://localhost:5173/confirm/${confirmationToken}`
+        
     }
     const message = `Please click the link to activate your email:<a href=${confirmEmailLink}>\n\n${confirmEmailLink}\n\n</a>If you have not requested this email, then ignore it.`
     try {
@@ -60,7 +60,9 @@ exports.registerUser = async (req, res, next) => {
         user.confirmEmailToken = undefined
         user.confirmTokenExpire = undefined
         await user.save({ validateBeforeSave: false })
+        console.log(error.message);
         return res.status(500).json({ error: error.message })
+      
 
     }
 }

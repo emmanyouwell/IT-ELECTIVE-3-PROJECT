@@ -5,7 +5,7 @@ import Files from './Files';
 const Classroom = () => {
     const [isSideNavVisible, setSideNavVisible] = useState(false);
     const sideNavRef = useRef(null); // Create a ref for the SideNav
-    const [group, setGroup] = useState(1);
+    const [group, setGroup] = useState(null);
     const toggleSideNav = () => {
         setSideNavVisible(!isSideNavVisible);
     };
