@@ -76,7 +76,7 @@ exports.loginUser = async (req, res, next) => {
         })
     }
 
-    const user = await User.findOne({ email }).select('+password')
+    const user = await User.findOne({ email }).select('+password').populate('groupID')
 
     if (!user) {
         return res.status(401).json({
@@ -201,7 +201,7 @@ exports.resetPassword = async (req, res, next) => {
     sendToken(user, 200, res);
 }
 exports.getUserProfile = async (req, res, next) => {
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.user.id).populate("groupID");
 
     res.status(200).json({
         success: true,

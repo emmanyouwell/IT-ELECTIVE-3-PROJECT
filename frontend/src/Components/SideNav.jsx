@@ -8,13 +8,13 @@ import {
     ListItemSuffix,
     Chip,
 } from "@material-tailwind/react";
-import { getGroups, clearErrors } from '../Actions/groupActions';
+import { getGroups, getGroupDetails, clearErrors } from '../Actions/groupActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom'
 const SideNav = ({ setGroup }) => {
     const listItemRefs = useRef([]);
 
-
+    const { user, isAuthenticated } = useSelector(state => state.auth)
     const handleTabClick = (groupId, index) => {
         // Reset background color for all list items
         listItemRefs.current.forEach((item) => {
@@ -33,18 +33,29 @@ const SideNav = ({ setGroup }) => {
         handleClick(groupId);
     };
     const dispatch = useDispatch()
-    const { groups, loading, error } = useSelector(state => state.groups)
-    const { groups: index, error: detailError } = useSelector(state => state.groupDetails);
+    const { groups: allGroups, loading, error: allErrors } = useSelector(state => state.groups)
+    const { groups, error } = useSelector(state => state.groupDetails);
     const handleClick = (menuItem) => {
         setGroup(menuItem);
     }
 
     useEffect(() => {
         if (error) {
-            dispatch(clearErrors())
+            dispatch(clearErrors());
         }
-        dispatch(getGroups())
-    }, [dispatch, error])
+        if (allErrors){
+            dispatch(clearErrors());
+        }
+      
+        
+        dispatch(getGroups());
+    }, [dispatch, error, allErrors])
+
+    useEffect(() => {
+        if (user) {
+            console.log('user: ', user);
+        }
+    }, [user])
 
     return (
 
@@ -58,21 +69,33 @@ const SideNav = ({ setGroup }) => {
                 </Link>
             </div>
             <List className="h-full">
-                {groups && groups.map((group, index) => (
-                    <ListItem
-                        key={group._id}
-                        onClick={() => handleTabClick(group._id, index)}
-                        ref={(el) => (listItemRefs.current[index] = el)}
-                        className="cursor-pointer p-2 rounded transition-colors"
-                    >
-                        <ListItemPrefix>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
-                            </svg>
-                        </ListItemPrefix>
-                        GROUP {group.group}
-                    </ListItem>
-                ))}
+                <ListItem
+                    key={user.groupID._id}
+                    onClick={() => handleTabClick(user.groupID._id, 0)}
+                    
+                    className="cursor-pointer p-2 rounded transition-colors"
+                >
+                    <ListItemPrefix>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+                        </svg>
+                    </ListItemPrefix>
+                    GROUP {user && user.groupID.group}
+                </ListItem>
+                <hr className="my-2 border-blue-gray-50" />
+                {allGroups && allGroups.map((group, index) =>( <ListItem
+                    key={group._id}
+                    onClick={() => handleTabClick(group._id)}
+                    
+                    className="cursor-pointer p-2 rounded transition-colors"
+                >
+                    <ListItemPrefix>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+                        </svg>
+                    </ListItemPrefix>
+                    GROUP {group.group}
+                </ListItem>))}
             </List>
         </Card>
 

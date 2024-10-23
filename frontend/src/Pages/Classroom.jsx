@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import SideNav from '../Components/SideNav';
 import Files from './Files';
-
+import { useDispatch, useSelector } from 'react-redux';
 const Classroom = () => {
     const [isSideNavVisible, setSideNavVisible] = useState(false);
     const sideNavRef = useRef(null); // Create a ref for the SideNav
     const [group, setGroup] = useState(null);
+    
     const toggleSideNav = () => {
         setSideNavVisible(!isSideNavVisible);
     };

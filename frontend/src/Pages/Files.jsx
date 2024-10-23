@@ -35,7 +35,7 @@ const Files = ({ group }) => {
     const { isVisible } = useSelector(state => state.form)
     const { isVisible: quizVisible } = useSelector(state => state.quizForm)
     const { isVisible: editVisible } = useSelector(state => state.edit)
-
+    const {user} = useSelector(state => state.auth)
     const { success, loading, error } = useSelector(state => state.subtopics);
     const { error: deleteError, isDeleted, loading: submitLoading } = useSelector(state => state.subtopic);
     const {isDeleted:quizDelete, loading: deleteLoading, error: quizDeleteError} = useSelector(state => state.quiz);
@@ -172,7 +172,8 @@ const Files = ({ group }) => {
 
                             </>
                         ))}
-                    {editVisible && (<div ref={editRef}>
+                        {user.groupID._id === groups._id ? (<>
+                            {editVisible && (<div ref={editRef}>
                         <EditSubtopic subtopicId={editId} /></div>)}
                     {!isVisible && <AddNewSectionButton onAdd={showForm} />}
                     {isVisible && (<NewSubtopic groupId={groups._id} />)}
@@ -202,7 +203,8 @@ const Files = ({ group }) => {
 
                                 <FlipCards questions={groups.quiz.questions} />
                             </div>
-                        </section>}
+                        </section>}</>) : null}
+                   
                 </>) : (<><div className="flex justify-center items-center h-[90%]"><img src={choose} alt="choose group"/></div></>)}
 
 
