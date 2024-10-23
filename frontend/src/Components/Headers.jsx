@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     Navbar,
     MobileNav,
@@ -8,16 +8,31 @@ import {
     Card,
     Collapse,
 } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux'
+import { logoutUser, getUser } from "../Actions/authActions";
+import { toast } from 'react-toastify'
 const Headers = () => {
-    const [openNav, setOpenNav] = React.useState(false);
+    const [openNav, setOpenNav] = useState(false);
+    const dispatch = useDispatch()
+    const { user, loading, error } = useSelector(state => state.auth)
+    const navigate = useNavigate();
+    const logoutHandler = () => {
 
-    React.useEffect(() => {
+        dispatch(logoutUser());
+        toast.success('Logged out');
+
+
+    }
+
+    useEffect(() => {
         window.addEventListener(
             "resize",
             () => window.innerWidth >= 960 && setOpenNav(false),
         );
-    }, []);
+        dispatch(getUser())
+    }, [])
+
 
     const navList = (
         <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
@@ -70,14 +85,25 @@ const Headers = () => {
             <div className="flex items-center justify-between text-blue-gray-900">
                 <Typography
                     as="a"
-                    href="#"
+                    href="/"
                     className="mr-4 cursor-pointer py-1.5 font-medium"
                 >
                     IT PROFESSIONAL ELECTIVE 3 - BSIT S4A
                 </Typography>
                 <div className="flex items-center gap-4">
                     <div className="mr-4 hidden lg:block">{navList}</div>
-                    <div className="flex items-center gap-x-1">
+                    {user ? (<div className="flex items-center gap-x-4">
+                        <Typography variant="small" className="font-concert" color="blue-gray">
+                            Welcome, {user.name}</Typography>
+                        <Button
+                            onClick={logoutHandler}
+                            variant="gradient"
+                            size="sm"
+                            className="hidden lg:inline-block"
+                        >
+                            <span>Log Out</span>
+                        </Button>
+                    </div>) : (<div className="flex items-center gap-x-1">
                         <Link to="/login">
                             <Button
                                 variant="text"
@@ -88,15 +114,16 @@ const Headers = () => {
                             </Button>
                         </Link>
                         <Link to="/register">
-                        <Button
-                            variant="gradient"
-                            size="sm"
-                            className="hidden lg:inline-block"
-                        >
-                            <span>Sign in</span>
-                        </Button>
+                            <Button
+                                variant="gradient"
+                                size="sm"
+                                className="hidden lg:inline-block"
+                            >
+                                <span>Sign in</span>
+                            </Button>
                         </Link>
-                    </div>
+                    </div>)}
+
                     <IconButton
                         variant="text"
                         className="ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
@@ -138,14 +165,35 @@ const Headers = () => {
             </div>
             <Collapse open={openNav}>
                 {navList}
-                <div className="flex items-center gap-x-1">
-                    <Button fullWidth variant="text" size="sm" className="">
-                        <span>Log In</span>
+                {user ? (<div className="flex items-center gap-x-1">
+                    <Button
+                        onClick={logoutHandler}
+                        variant="gradient"
+                        size="sm"
+                        className=""
+                    >
+                        <span>Log Out</span>
                     </Button>
-                    <Button fullWidth variant="gradient" size="sm" className="">
-                        <span>Sign in</span>
-                    </Button>
-                </div>
+                </div>) : (<div className="flex items-center gap-x-4">
+                    <Link to="/login">
+                        <Button
+                            variant="text"
+                            size="sm"
+                            className=""
+                        >
+                            <span>Log In</span>
+                        </Button>
+                    </Link>
+                    <Link to="/register">
+                        <Button
+                            variant="gradient"
+                            size="sm"
+                            className=""
+                        >
+                            <span>Sign in</span>
+                        </Button>
+                    </Link>
+                </div>)}
             </Collapse>
         </Navbar>
     );

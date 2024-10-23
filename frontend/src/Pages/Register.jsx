@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getGroups, clearErrors } from '../Actions/groupActions';
 import { register, clearErrors as registerClearErrors } from '../Actions/authActions';
-import { useNavigate } from 'react-router-dom';
+const images = ['https://www.pngkey.com/png/detail/233-2332677_image-500580-placeholder-transparent.png', 'https://www.pngkey.com/png/detail/233-2332677_image-500580-placeholder-transparent.png', 'https://www.pngkey.com/png/detail/233-2332677_image-500580-placeholder-transparent.png'];
+import { useNavigate, Link } from 'react-router-dom';
 // @material-tailwind/react
 import {
     Input,
@@ -75,7 +76,7 @@ const Register = () => {
         <>
             <Headers />
             <section
-                className="container mx-auto p-5 sm:p-8 md:p-10 border-4 border-gray-300 my-10 rounded-lg"
+                className="container flex justify-between mx-auto p-5 sm:p-8 md:p-10 border-4 border-gray-300 my-10 rounded-lg"
             >
 
                 <Card color="transparent" shadow={false}>
@@ -184,12 +185,13 @@ const Register = () => {
                         </Button>
                         <Typography color="gray" className="mt-4 text-center font-normal">
                             Already have an account?{" "}
-                            <a href="#" className="font-medium text-gray-900">
+                            <Link to="/login" className="font-medium text-gray-900">
                                 Sign In
-                            </a>
+                            </Link>
                         </Typography>
                     </form>
                 </Card>
+                <img src={images} alt="image"/>
             </section>
         </>
     );

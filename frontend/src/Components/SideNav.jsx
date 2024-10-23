@@ -10,7 +10,7 @@ import {
 } from "@material-tailwind/react";
 import { getGroups, clearErrors } from '../Actions/groupActions';
 import { useDispatch, useSelector } from 'react-redux';
-
+import { Link } from 'react-router-dom'
 const SideNav = ({ setGroup }) => {
     const listItemRefs = useRef([]);
 
@@ -51,9 +51,11 @@ const SideNav = ({ setGroup }) => {
 
         <Card className="h-screen w-64 max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 sticky top-0 border-2">
             <div className="mb-2 p-4">
-                <Typography variant="h5" color="blue-gray">
-                    IT PROFESSIONAL ELECTIVE 3 - BSIT S4A
-                </Typography>
+                <Link to="/">
+                    <Typography variant="h5" color="blue-gray">
+                        IT PROFESSIONAL ELECTIVE 3 - BSIT S4A
+                    </Typography>
+                </Link>
             </div>
             <List className="h-full">
                 {groups && groups.map((group, index) => (

@@ -134,18 +134,13 @@ export const login = (email, password, next) => async (dispatch) => {
                 type: VERIFY_LOGIN_FAIL,
                 payload: data
             })
-            toast.success(data.message, {
-                position: toast.POSITION.BOTTOM_RIGHT
-
-            })
+            toast.success(data.message)
 
             next('/login/?redirect=email-activation')
         }
 
         else {
-            toast.success('Logged in', {
-                position: toast.POSITION.BOTTOM_RIGHT
-            })
+            toast.success('Logged in')
             dispatch({
                 type: LOGIN_SUCCESS,
                 payload: data.user
@@ -156,11 +151,10 @@ export const login = (email, password, next) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: LOGIN_FAIL,
-            payload: error.response.data.message
+            payload: error.response
         })
-        toast.error(error.response.data.message, {
-            position: toast.POSITION.BOTTOM_RIGHT
-        })
+        toast.error(error.response)
+        console.log(error);
     }
 }
 
