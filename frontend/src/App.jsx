@@ -8,6 +8,9 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import {ToastContainer} from 'react-toastify';
 import NotFoundPage from "./NotFoundPage";
+import Register from "./Pages/Register";
+import EmailActivationPage from "./Pages/EmailActivationPage";
+import EmailActivatedPage from "./Pages/EmailActivatedPage";
 function App() {
   useEffect(() => {
     AOS.init({
@@ -22,7 +25,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Home/>}/>
         <Route path="/login" element={<Login/>}/>
+        <Route path="/register" element={<Register/>}/> 
         <Route path="/classroom" element={<Classroom/>}/>
+        <Route path="/email-activation" element={<EmailActivationPage/>}/>
+        <Route path="/confirm/:token" element={<EmailActivatedPage/>}/>
         <Route path="*" element={<NotFoundPage/>}/>
       </Routes>
       <ToastContainer position="bottom-right"/>

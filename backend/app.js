@@ -6,6 +6,7 @@ const group = require('./routes/group');
 const auth = require('./routes/auth');
 const subtopic = require('./routes/subtopic');
 const quiz = require('./routes/quiz');
+
 // CORS configuration
 const corsOptions = {
     origin: ['https://it-elective-3-project.vercel.app', 'http://localhost:5173'], // Allow only your Vercel frontend

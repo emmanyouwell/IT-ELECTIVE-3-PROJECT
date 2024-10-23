@@ -22,15 +22,9 @@ const userSchema = new mongoose.Schema({
         minlength: [6, 'Your password must be longer than 6 characters'],
         select: false
     },
-    avatar: {
-        public_id: {
-            type: String,
-            required: true
-        },
-        url: {
-            type: String,
-            required: true
-        }
+    groupID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Groups',
     },
     role: {
         type: String,
@@ -39,10 +33,18 @@ const userSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
+    }, 
+    isVerified: {
+        type: Boolean,
+        default: false
+
     },
+    confirmEmailToken: String,
+    confirmTokenExpire: Date,
     resetPasswordToken: String,
     resetPasswordExpire: Date
 })
+
 userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) {
         next()
@@ -60,6 +62,16 @@ userSchema.methods.comparePassword = async function (enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password)
 }
 
+userSchema.methods.getConfirmEmailToken = function () {
+    const confirmationToken = crypto.randomBytes(20).toString('hex');
+
+    this.confirmEmailToken = crypto.createHash('sha256').update(confirmationToken).digest('hex')
+
+    this.confirmTokenExpire = Date.now() + 30 * 60 * 1000
+
+    return confirmationToken
+
+}
 userSchema.methods.getResetPasswordToken = function () {
     // Generate token
     const resetToken = crypto.randomBytes(20).toString('hex');
@@ -73,5 +85,6 @@ userSchema.methods.getResetPasswordToken = function () {
     return resetToken
 
 }
+
 
 module.exports = mongoose.model('User', userSchema);

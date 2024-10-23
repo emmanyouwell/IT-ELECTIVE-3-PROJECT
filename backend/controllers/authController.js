@@ -2,30 +2,67 @@ const User = require('../models/user');
 const sendToken = require('../utils/jwToken');
 const sendEmail = require('../utils/sendEmail');
 const crypto = require('crypto');
-
+const Group = require('../models/groups');
 // const ErrorHandler = require('../utils/errorHandler');
 
 exports.registerUser = async (req, res, next) => {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, groupId } = req.body;
+    console.log(name)
+    console.log(email)
+    console.log(password)
+    console.log(groupId)
+    const userExists = await User.findOne({ email: req.body.email });
+    if (userExists) {
+        return res.status(400).json({
+            success: false,
+            message: 'Email already in use.'
+        })
+    }
+    const groupID = await Group.findById(groupId);
+    if (!groupID) {
+        return res.status(400).json({ success: false, error: 'Group not found' })
+    }
+
+
     const user = await User.create({
         name,
         email,
         password,
-        avatar: {
-            public_id: 'avatars/hsdfl66pg2mpvp5irfqy',
-            url: 'https://res.cloudinary.com/dgneiaky7/image/upload/v1680144230/avatars/hsdfl66pg2mpvp5irfqy.jpg'
-        },
-        role,
+        group: groupId,
     })
-    //test token
-     const token = user.getJwtToken();
+    if (!user) {
+        return res.status(400).json({
+            success: false,
+            message: 'User not created'
+        })
+    }
+    const confirmationToken = user.getConfirmEmailToken();
+    await user.save({ validateBeforeSave: false });
+    let confirmEmailLink = ''
+    if (process.env.SMTP_HOST === 'smpt.gmail.com') {
+        confirmEmailLink = `${req.protocol}://it-elective-3-project.vercel.app/confirm/${confirmationToken}`
+    }
+    else {
+        confirmEmailLink = `${req.protocol}://localhost:5173/confirm/${confirmationToken}`
+    }
+    const message = `Please click the link to activate your email:<a href=${confirmEmailLink}>\n\n${confirmEmailLink}\n\n</a>If you have not requested this email, then ignore it.`
+    try {
+        await sendEmail({
+            email: user.email,
+            subject: 'Account Activation',
+            message
+        })
+        res.status(200).json({
+            success: true,
+            message: `Email sent to: ${user.email}`
+        })
+    } catch (error) {
+        user.confirmEmailToken = undefined
+        user.confirmTokenExpire = undefined
+        await user.save({ validateBeforeSave: false })
+        return res.status(500).json({ error: error.message })
 
-      res.status(201).json({
-      	success:true,
-      	user,
-     	token
-      })
-    sendToken(user, 200, res)
+    }
 }
 
 exports.loginUser = async (req, res, next) => {
@@ -215,4 +252,24 @@ exports.getUserDetails = async (req, res, next) => {
         success: true,
         user
     })
+}
+
+exports.confirmEmail = async (req, res, next) => {
+    const confirmEmailToken = crypto.createHash('sha256').update(req.params.token).digest('hex')
+    const user = await User.findOne({
+        confirmEmailToken,
+        confirmTokenExpire: { $gt: Date.now() }
+    })
+    if (!user) {
+        return res.status(400).json({ message: 'Invalid token or token has expired' })
+    }
+    if (user.isVerified) {
+        return res.status(400).json({ message: 'Email is already verified' })
+    }
+
+    user.isVerified = true;
+    user.confirmEmailToken = undefined;
+    user.confirmTokenExpire = undefined;
+    await user.save({ validateBeforeSave: false })
+    sendToken(user, 200, res)
 }
