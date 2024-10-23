@@ -12,6 +12,7 @@ import Register from "./Pages/Register";
 import EmailActivationPage from "./Pages/EmailActivationPage";
 import EmailActivatedPage from "./Pages/EmailActivatedPage";
 import ProtectedRoute from "./Routes/ProtectedRoute";
+import ConverterSection from "./Components/ConverterSection";
 function App() {
   useEffect(() => {
     AOS.init({
@@ -31,6 +32,7 @@ function App() {
           <ProtectedRoute><Classroom /></ProtectedRoute>} />
         <Route path="/email-activation" element={<EmailActivationPage />} />
         <Route path="/confirm/:token" element={<EmailActivatedPage />} />
+        <Route path="/converter" element={<ConverterSection/>}/>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <ToastContainer position="bottom-right" />
