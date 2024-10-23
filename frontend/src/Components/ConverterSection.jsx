@@ -3,6 +3,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import FlipCards from './FlipCards';
+import Headers from './Headers';
 
 const ConverterSection = () => {
   const [fileContent, setFileContent] = useState('');
@@ -103,6 +104,8 @@ const ConverterSection = () => {
   };
 
   return (
+    <>
+    <Headers/>
     <div className="bg-gray-100 p-6">
       <h1 className="text-2xl font-bold mb-4">Upload your .txt to format it as JSON</h1>
       <form onSubmit={formik.handleSubmit}>
@@ -155,6 +158,7 @@ const ConverterSection = () => {
         )}
       </div>
     </div>
+    </>
   );
 };
 
