@@ -118,7 +118,7 @@ const Files = ({ group }) => {
                                     <p className="text-xl sm:text-2xl">
                                         <strong>Subtopic {toRoman(index + 1)}.</strong> {item.title}
                                     </p>
-                                    {user.groupID._id === groups._id && (<div className="flex space-x-4">
+                                    {user.groupID._id === groups._id && user.role !== 'admin' && (<div className="flex space-x-4">
                                         <button
                                             onClick={() => handleEdit(item._id)}
                                             className="p-4 border-2 border-gray-900 rounded-lg hover:bg-gray-900 hover:text-white transition-all duration-200"
@@ -170,7 +170,7 @@ const Files = ({ group }) => {
 
                             </>
                         ))}
-                    {user.groupID._id === groups._id ? (<>
+                    {user.groupID._id === groups._id && user.role !== 'admin' ? (<>
                         {editVisible && (<div ref={editRef}>
                             <EditSubtopic subtopicId={editId} /></div>)}
                         {!isVisible && <AddNewSectionButton onAdd={showForm} />}
@@ -181,7 +181,7 @@ const Files = ({ group }) => {
                             <section className="p-10 border-8 rounded-lg" style={{ borderColor: borderColors[0] }}>
                                 <div className="container flex flex-col justify-center items-center mb-10 mx-auto">
                                     <div className="flex justify-end w-full">
-                                        {user.groupID._id === groups._id && (<div className="flex space-x-4">
+                                        {user.groupID._id === groups._id && user.role !== 'admin' && (<div className="flex space-x-4">
 
                                             <button
                                                 onClick={() => handleQuizDelete(groups.quiz._id)}
