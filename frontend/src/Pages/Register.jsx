@@ -78,7 +78,7 @@ const Register = () => {
     return (
         <>
             <Headers />
-            {registerLoading ? <DotLoader /> : (<section
+            {registerLoading ? <div className="container flex justify-center items-center mx-auto w-full h-screen"><DotLoader /></div> : (<section
                 className="container flex flex-col lg:flex-row justify-between items-center mx-auto p-5 sm:p-8 md:p-10 border-4 border-gray-300 my-10 rounded-lg"
             >
 
