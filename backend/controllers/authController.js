@@ -91,7 +91,7 @@ exports.loginUser = async (req, res, next) => {
         await user.save({ validateBeforeSave: false })
         let confirmEmailUrl = ''
         if (process.env.SMTP_HOST === 'smtp.gmail.com') {
-            confirmEmailUrl = `${req.protocol}://tup-handa.vercel.app/confirm/${confirmationToken}`
+            confirmEmailUrl = `${req.protocol}://it-elective-3-project.vercel.app/confirm/${confirmationToken}`
         }
         else {
             confirmEmailUrl = `${req.protocol}://localhost:5173/confirm/${confirmationToken}`
