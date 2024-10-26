@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { NEW_SUBTOPICS_RESET, HIDE_FORM } from '../constants/subtopicConstants';
 import { getYouTubeVideoId } from '../utils/VideoID';
 import { toast } from 'react-toastify';
+import {driver} from 'driver.js';
 
 const NewSubtopic = ({ setIsVisible, groupId }) => {
     const dispatch = useDispatch();
@@ -65,7 +66,32 @@ const NewSubtopic = ({ setIsVisible, groupId }) => {
             // console.log('Form submitted:', formData);
         },
     });
+    const newSubtopicDriver =  driver({
+        showProgress: true,
+        allowClose: false,
+        disableActiveInteraction: true,
+        steps: [
+            {
+                element: '#title', popover: {
+                    title: 'Input title of subtopic.', description: 'Enter the title of your subtopic here.', side: "left", align: 'start'
+                }
+            },
+            { element: '#videoLink', popover: { title: 'Input YouTube link of your video.', description: 'Copy and paste the link of your YouTube video and it will automatically embed the video in the frame.', side: "bottom", align: 'start' } },
+            { element: '#videoFrame', popover: { title: 'Video frame.', description: 'Once your video appears here, it means you\'ve successfully uploaded your video.', side: "bottom", align: 'start' } },
+            { element: '#images', popover: { title: 'Upload multiple images.', description: 'Upload the slides of your subtopic here. You can upload a maximum of 20 images.', side: "bottom", align: 'start' } },
+            { element: '#carousel', popover: { title: 'Image preview', description: 'You can view the uploaded images here.', side: "bottom", align: 'start' } },
+            { element: '#transcript', popover: { title: 'Input transcript of video.', description: 'Enter the transcript of your 1-3 minute video here.', side: "bottom", align: 'start' } },
+            { element: '#submit', popover: { title: 'Submit the form.', description: 'After submitting the form, a new card containing the subtopic should appear in your group folder.', side: "bottom", align: 'start' } },
+            { element: '#cancel', popover: { title: 'Cancel.', description: 'You can click this to cancel the process and hide the form.', side: "bottom", align: 'start'}}
+        ],
+       
+    });
     useEffect(() => {
+        const isFirstAddSubtopic = localStorage.getItem('isFirstAddSubtopic') === null;
+        if (isFirstAddSubtopic) {
+            localStorage.setItem('isFirstAddSubtopic', 'false');
+            newSubtopicDriver.drive();
+        }
         if (error) {
             toast.error(error);
             dispatch(clearErrors())
@@ -83,13 +109,13 @@ const NewSubtopic = ({ setIsVisible, groupId }) => {
             className="p-5 sm:p-8 md:p-10 border-4 border-dashed border-gray-300 my-3 rounded-lg"
         >
             <form onSubmit={formik.handleSubmit}>
-                <div className="text-xl sm:text-2xl mb-6 sm:mb-10 flex flex-col">
+                <div className="text-xl sm:text-2xl mb-6 sm:mb-10 flex flex-col" id="title">
                     <label className="block text-sm font-bold mb-2" htmlFor="title">
                         Title
                     </label>
                     <input
                         type="text"
-                        id="title"
+                      
                         name="title"
                         placeholder="Enter title here"
                         onChange={formik.handleChange}
@@ -112,15 +138,16 @@ const NewSubtopic = ({ setIsVisible, groupId }) => {
                                 frameBorder="0"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowFullScreen
+                                id="videoFrame"
                             ></iframe>
                         </div>
-                        <div className="mb-4 p-4">
+                        <div className="mb-4 p-4" id="videoLink">
                             <label className="block text-sm font-bold mb-2" htmlFor="videoLink">
                                 Video Link
                             </label>
                             <input
                                 type="text"
-                                id="videoLink"
+                                
                                 name="videoLink"
                                 placeholder="Enter YouTube Video ID"
                                 onChange={(e) => {
@@ -149,13 +176,13 @@ const NewSubtopic = ({ setIsVisible, groupId }) => {
                     {/* Slides */}
                     <div className="w-full md:w-1/2 flex flex-col justify-center">
                         <Carousel images={imagePreview.length ? imagePreview : images} />
-                        <div className="mt-4 mb-4 p-4">
+                        <div className="mt-4 mb-4 p-4"   id="images">
                             <label className="block text-sm font-bold mb-2" htmlFor="images">
-                                Image Links (comma separated)
+                                Multiple images (max of 20 images)
                             </label>
                             <input
                                 type="file"
-                                id="images"
+                              
                                 name="images"
                                 accept="image/*"
                                 onChange={onChange}
@@ -174,10 +201,11 @@ const NewSubtopic = ({ setIsVisible, groupId }) => {
 
 
 
-                <div className="text-justify">
+                <div className="text-justify"  id="transcript">
                     <h1 className="font-concert text-2xl sm:text-3xl font-bold mb-3">Transcript</h1>
                     <textarea
                         name="transcript"
+                       
                         placeholder="Enter Transcript"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
@@ -193,7 +221,7 @@ const NewSubtopic = ({ setIsVisible, groupId }) => {
 
                     <button
                         type="submit"
-                        className="font-bold py-2 px-4 rounded-lg border-2 border-gray-900 hover:bg-gray-900 hover:text-white flex items-center justify-center transition-all duration-200 w-28"
+                        className="font-bold py-2 px-4 rounded-lg border-2 border-gray-900 hover:bg-gray-900 hover:text-white flex items-center justify-center transition-all duration-200 w-28" id="submit"
                     >
                         {loading ? (
                             <div className="w-10 h-10 border-4 border-t-gray-900 border-gray-300 rounded-full animate-spin"></div>
@@ -204,7 +232,7 @@ const NewSubtopic = ({ setIsVisible, groupId }) => {
                     </button>
                     <button
                         onClick={() => dispatch({ type: HIDE_FORM })}
-                        className="font-bold py-2 px-4 rounded-lg border-2  border-red-500 text-red-500 hover:bg-red-500 hover:text-white flex items-center justify-center transition-all duration-200 w-28"
+                        className="font-bold py-2 px-4 rounded-lg border-2  border-red-500 text-red-500 hover:bg-red-500 hover:text-white flex items-center justify-center transition-all duration-200 w-28" id="cancel"
                     >
                         <XMarkIcon className="h-10 w-10" />
                     </button>

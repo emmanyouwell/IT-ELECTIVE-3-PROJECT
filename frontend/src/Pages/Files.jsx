@@ -27,7 +27,7 @@ const borderColors = ['#264653', '#2a9d8f', '#e9c46a', '#f4a261', '#e76f51']; //
 
 import EditSubtopic from '../Components/EditSubtopic';
 import { toast } from 'react-toastify';
-const Files = ({ group }) => {
+const Files = ({ group}) => {
     const dispatch = useDispatch();
     const editRef = useRef(null);
     const [editId, setEditId] = useState('');
@@ -102,7 +102,7 @@ const Files = ({ group }) => {
             <div className="flex-grow h-full p-5">
 
                 <section className="p-2 mb-10">
-                    <h1 className="text-5xl font-concert font-bold text-center">{groups && groups.topic}</h1>
+                    <h1 className="text-5xl font-concert font-bold text-center" id="topic">{groups && groups.topic}</h1>
 
                 </section>
                 {groups && groups.topic ? (<>
@@ -174,7 +174,7 @@ const Files = ({ group }) => {
                         {editVisible && (<div ref={editRef}>
                             <EditSubtopic subtopicId={editId} /></div>)}
                         {!isVisible && <AddNewSectionButton onAdd={showForm} />}
-                        {isVisible && (<NewSubtopic groupId={groups._id} />)}
+                        {isVisible && (<NewSubtopic groupId={groups._id}/>)}
 
                         {!groups.quiz && <AddQuizSection groupId={groups._id} />}
                         {groups.quiz && groups.quiz.questions && groups.quiz.questions.length > 0 &&

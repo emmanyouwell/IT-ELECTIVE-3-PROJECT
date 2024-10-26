@@ -8,7 +8,7 @@ const CarouselComponent = ({ images }) => {
   const isSmall = width < 768;
   const normalizedImages = Array.isArray(images) ? images : [images];
   return (
-    <Carousel  prevArrow={({ handlePrev }) => (
+    <Carousel id="carousel" prevArrow={({ handlePrev }) => (
       <IconButton
         variant="text"
         color="brown"

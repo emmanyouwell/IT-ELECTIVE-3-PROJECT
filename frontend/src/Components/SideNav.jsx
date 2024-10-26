@@ -8,11 +8,14 @@ import {
     ListItemSuffix,
     Chip,
 } from "@material-tailwind/react";
+
 import { getGroups, getGroupDetails, clearErrors } from '../Actions/groupActions';
 import { getUser } from '../Actions/authActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom'
 const SideNav = ({ setGroup }) => {
+    
+    
     const listItemRefs = useRef([]);
 
     const { user, isAuthenticated } = useSelector(state => state.auth)
@@ -41,6 +44,7 @@ const SideNav = ({ setGroup }) => {
     }
 
     useEffect(() => {
+        
         if (error) {
             dispatch(clearErrors());
         }
@@ -53,13 +57,13 @@ const SideNav = ({ setGroup }) => {
         dispatch(getUser());
     }, [dispatch, error, allErrors])
 
-   
+
 
     return (
 
 
         <Card className="h-screen w-64 max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 sticky top-0 border-2">
-            <div className="mb-2 p-4">
+            <div className="mb-2 p-4" id="header">
                 <Link to="/">
                     <Typography variant="h5" color="blue-gray">
                         IT PROFESSIONAL ELECTIVE 3 - BSIT S4A
@@ -68,10 +72,10 @@ const SideNav = ({ setGroup }) => {
             </div>
             <List className="h-full">
                 {user && user.groupID && (<ListItem
-                    
+
                     onClick={() => handleTabClick(user.groupID._id, 0)}
 
-                    className="cursor-pointer p-2 rounded transition-colors"
+                    className="cursor-pointer p-2 rounded transition-colors" id="own-group"
                 >
                     <ListItemPrefix>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -82,6 +86,7 @@ const SideNav = ({ setGroup }) => {
                 </ListItem>)}
 
                 <hr className="my-2 border-blue-gray-50" />
+                <div id="all-groups">
                 {allGroups && allGroups.map((group, index) => (<ListItem
                     key={group._id}
                     onClick={() => handleTabClick(group._id)}
@@ -95,6 +100,8 @@ const SideNav = ({ setGroup }) => {
                     </ListItemPrefix>
                     GROUP {group.group}
                 </ListItem>))}
+                </div>
+                
             </List>
         </Card>
 

@@ -5,6 +5,7 @@ const AddNewSectionButton = ({ onAdd }) => {
         <section
             onClick={onAdd} // Function to handle the addition of a new section
             className="flex items-center justify-center px-4 py-2 border-4 border-blue-gray-100 hover:border-blue-gray-500 hover:cursor-pointer transition-all duration-200  border-dashed text-gray-800 w-full h-16 hover:h-24 my-5"
+            id="new-section" 
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"

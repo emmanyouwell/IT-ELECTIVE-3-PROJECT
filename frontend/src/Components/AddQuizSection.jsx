@@ -56,6 +56,7 @@ const AddQuizSection = ({ groupId }) => {
             <section
                 onClick={handleSectionClick}
                 className="flex items-center justify-center px-4 py-2 border-4 border-blue-gray-100 hover:border-blue-gray-500 hover:cursor-pointer transition-all duration-200 border-dashed text-gray-800 w-full h-20 hover:h-24 my-5"
+                id="add-quiz"
             >
                 <input
                     type="file"

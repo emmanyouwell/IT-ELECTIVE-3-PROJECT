@@ -1,5 +1,5 @@
 import React from 'react'
-import myImage from './assets/image/404.jpg';
+import myImage from './assets/image/ej404.jpg';
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 const NotFoundPage = () => {
@@ -16,11 +16,11 @@ const NotFoundPage = () => {
                     <h2 className='mt-6 text-center text-4xl font-extrabold text-gray-900'>
                         Page Not Found
                     </h2>
-                    <p className='mt-2 text-center font-concert text-lg text-red-800'>
-                        I'm just as disappointed as you are.
+                    <p className='mt-2 text-center font-concert text-3xl text-red-800'>
+                        Wala to error pre, pramis!
                     </p>
                     <div className=" flex justify-center items-center py-5">
-                        <img src={myImage} alt="Page not found" className='md:w-[60%] sm:block' />
+                        <img src={myImage} alt="Page not found" className='md:w-[45%] sm:block' />
                     </div>
 
 
