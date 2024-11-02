@@ -46,7 +46,29 @@ const Headers = () => {
                     TXT to JSON
                 </Link>
             </Typography>
-           
+            <Typography
+                as="li"
+                variant="small"
+                color="blue-gray"
+                className="p-1 font-normal"
+            >
+                <a target="_blank" href="https://drive.google.com/drive/folders/1f-m9ODubC44RMtYNU1dIinDQkFco4Q7u?usp=drive_link">
+                    Google Drive
+                </a>
+            </Typography>
+            <Typography
+                as="li"
+                variant="small"
+                color="blue-gray"
+                className="p-1 font-normal"
+            >
+                <a target="_blank" href="https://www.canva.com/design/DAGVTSzXZtg/rto-SnGiicdsnMUgKi5dXA/edit?utm_content=DAGVTSzXZtg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton">
+                    Thumbnail
+                </a>
+
+
+            </Typography>
+
         </ul>
     );
 

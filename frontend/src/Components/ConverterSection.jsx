@@ -7,7 +7,9 @@ import Headers from './Headers';
 import step1 from '../assets/image/step1.png';
 import step2 from '../assets/image/step2.png';
 import step3 from '../assets/image/step3.png';
+import sample from '../assets/image/sample.png';
 import { ArrowDownTrayIcon } from '@heroicons/react/20/solid';
+import { Button } from '@material-tailwind/react';
 const ConverterSection = () => {
   const [fileContent, setFileContent] = useState('');
   const [formattedJSON, setFormattedJSON] = useState([]);
@@ -176,10 +178,17 @@ const ConverterSection = () => {
               <img src={step2} alt="step1" className="w-full border-gray-500 border-2 rounded-lg p-3" />
             </div>
           </li>
-          <li className="col-span-2">
+          <li>
             <h2 className="text-xl font-semibold mb-2 text-center">Step 3: Download your JSON file</h2>
             <div className="p-3 flex justify-center items-center">
-              <img src={step3} alt="step1" className="w-[50%] border-gray-500 border-2 rounded-lg p-3" />
+              <img src={step3} alt="step1" className="w-full border-gray-500 border-2 rounded-lg p-3" />
+            </div>
+          </li>
+          <li>
+            <h2 className="text-xl font-semibold mb-2 text-center">Download Sample .txt file here</h2>
+            <div className="p-3 flex flex-col justify-center items-center  border-gray-500 border-2 rounded-lg">
+              <img src={sample} alt="step1" className="h-[auto] w-full p-3" />
+              <a href="https://res.cloudinary.com/dtrr0ihcb/raw/upload/fl_attachment/v1730524688/IT_ELECTIVE_3/sample/SAMPLE_ew9pr2.txt" download><Button variant="gradient" size="sm">Download .txt file</Button></a>
             </div>
           </li>
         </ol>
