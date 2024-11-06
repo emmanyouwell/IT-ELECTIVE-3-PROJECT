@@ -78,7 +78,7 @@ const NewSubtopic = ({ setIsVisible, groupId }) => {
             },
             { element: '#videoLink', popover: { title: 'Input YouTube link of your video.', description: 'Copy and paste the link of your YouTube video and it will automatically embed the video in the frame.', side: "bottom", align: 'start' } },
             { element: '#videoFrame', popover: { title: 'Video frame.', description: 'Once your video appears here, it means you\'ve successfully uploaded your video.', side: "bottom", align: 'start' } },
-            { element: '#images', popover: { title: 'Upload multiple images.', description: 'Upload the slides of your subtopic here. You can upload a maximum of 20 images.', side: "bottom", align: 'start' } },
+            { element: '#images', popover: { title: 'Upload multiple images.', description: 'Upload the slides of your subtopic here. You can upload a maximum of 100 images.', side: "bottom", align: 'start' } },
             { element: '#carousel', popover: { title: 'Image preview', description: 'You can view the uploaded images here.', side: "bottom", align: 'start' } },
             { element: '#transcript', popover: { title: 'Input transcript of video.', description: 'Enter the transcript of your 1-3 minute video here.', side: "bottom", align: 'start' } },
             { element: '#submit', popover: { title: 'Submit the form.', description: 'After submitting the form, a new card containing the subtopic should appear in your group folder.', side: "bottom", align: 'start' } },
