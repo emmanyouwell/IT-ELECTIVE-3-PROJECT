@@ -89,7 +89,7 @@ const Classroom = () => {
                     </div>
                 </div>
             )}
-            <div className="px-4 pt-10 w-full my-10 ">
+            <div className="px-4 pt-10 w-full my-10 lg:my-0">
                 <Files group={group} />
             </div>
 
