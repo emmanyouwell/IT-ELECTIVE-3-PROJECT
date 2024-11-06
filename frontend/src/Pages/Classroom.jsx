@@ -40,8 +40,8 @@ const Classroom = () => {
     useEffect(() => {
         // Check if the user is visiting for the first time
         const isFirstVisit = localStorage.getItem('isFirstVisit') === null;
-
-        if (isFirstVisit) {
+        const isMobile = window.innerWidth < 768;
+        if (isFirstVisit && !isMobile) {
             // Set the flag in localStorage to indicate that the user has visited
             localStorage.setItem('isFirstVisit', 'false');
             // Play the driver
@@ -66,9 +66,9 @@ const Classroom = () => {
     }, [isSideNavVisible]);
 
     return (
-        <div className="flex relative">
+        <div className="flex relative ">
             <button
-                className="md:hidden p-2 text-blue-500 absolute top-5 left-5"
+                className="md:hidden p-2 text-gray-500 absolute top-5 left-5 border-b-4"
                 onClick={toggleSideNav}
             >
                 {/* Hamburger Icon */}

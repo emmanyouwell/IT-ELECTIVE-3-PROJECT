@@ -178,7 +178,7 @@ const NewSubtopic = ({ setIsVisible, groupId }) => {
                         <Carousel images={imagePreview.length ? imagePreview : images} />
                         <div className="mt-4 mb-4 p-4"   id="images">
                             <label className="block text-sm font-bold mb-2" htmlFor="images">
-                                Multiple images (max of 20 images)
+                                Multiple images (max of 100 images)
                             </label>
                             <input
                                 type="file"
