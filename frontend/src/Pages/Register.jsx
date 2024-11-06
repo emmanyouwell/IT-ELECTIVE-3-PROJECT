@@ -79,10 +79,10 @@ const Register = () => {
         <>
             <Headers />
             {registerLoading ? <div className="container flex justify-center items-center mx-auto w-full h-screen"><DotLoader /></div> : (<section
-                className="container flex flex-col justify-center items-center lg:justify-between lg:items-center lg:flex-row  mx-auto p-5 sm:p-8 md:p-10  my-10 rounded-lg"
+                className="container flex flex-col justify-center items-center lg:justify-between lg:items-center lg:flex-row mx-auto p-5 sm:p-8 md:p-10  my-10 rounded-lg"
             >
 
-                <Card color="transparent" className="border-4 border-gray-300 p-8" shadow={false}>
+                <Card color="transparent" className="border-4 border-gray-300 p-4 sm:p-8" shadow={false}>
                     <Typography variant="h4" color="blue-gray">
                         Sign Up
                     </Typography>
