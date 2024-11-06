@@ -12,7 +12,7 @@ const Classroom = () => {
     const sideNavRef = useRef(null); // Create a ref for the SideNav
     const [group, setGroup] = useState(null);
     const { user } = useSelector(state => state.auth);
-    
+
     const driverObj = driver({
         showProgress: true,
         allowClose: false,
@@ -25,13 +25,13 @@ const Classroom = () => {
                     }
                 }
             },
-            { element: '#topic', popover: { title: 'Topic.', description: 'Displays the topic of the selected group.', side: "bottom", align: 'start' } },
             { element: '#all-groups', popover: { title: 'View other groups.', description: 'You can also view other groups to review their topics and practice their quiz as well.', side: "bottom", align: 'start' } },
+            { element: '#topic', popover: { title: 'Topic.', description: 'Displays the topic of the selected group.', side: "bottom", align: 'start' } },
             { element: '#new-section', popover: { title: 'Add new subtopics.', description: 'Clicking this button opens a form that allows you to add your own subtopics. This button is visible only to your group.', side: "bottom", align: 'start' } },
             { element: '#add-quiz', popover: { title: 'Add your quiz.', description: 'You can submit a .json file containing the question, choices, and answer of your quiz to add a flashcard.', side: "bottom", align: 'start' } }
         ],
     });
-    
+
     const toggleSideNav = () => {
         setSideNavVisible(!isSideNavVisible);
     };
@@ -90,9 +90,9 @@ const Classroom = () => {
                 </div>
             )}
             <div className="px-4 pt-10 w-full my-10 ">
-                <Files group={group}/>
+                <Files group={group} />
             </div>
-            
+
         </div>
     );
 };
