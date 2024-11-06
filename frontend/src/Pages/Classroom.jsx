@@ -66,7 +66,7 @@ const Classroom = () => {
     }, [isSideNavVisible]);
 
     return (
-        <div className="flex relative ">
+        <div className="flex relative">
             <button
                 className="md:hidden p-2 text-gray-500 absolute top-5 left-5 border-b-4"
                 onClick={toggleSideNav}
@@ -89,7 +89,7 @@ const Classroom = () => {
                     </div>
                 </div>
             )}
-            <div className="pt-10 w-full">
+            <div className="px-4 pt-10 w-full my-10 ">
                 <Files group={group}/>
             </div>
             

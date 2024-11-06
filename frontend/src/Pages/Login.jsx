@@ -70,10 +70,10 @@ const Login = () => {
         <>
             <Headers />
             {loading ? <div className="container flex justify-center items-center mx-auto w-full h-screen"><DotLoader /></div> : (<section
-                className="container mx-auto flex flex-col lg:flex-row justify-between items-center p-5 sm:p-8 md:p-10 border-4 border-gray-300 my-10 rounded-lg"
+                className="container mx-auto flex flex-col justify-center items-center lg:justify-between lg:items-center lg:flex-row p-5 sm:p-8 md:p-10 my-10 rounded-lg"
             >
 
-                <Card color="transparent" shadow={false}>
+                <Card color="transparent" className="border-4 border-gray-300 p-8"shadow={false}>
                     <Typography variant="h4" color="blue-gray">
                         Login
                     </Typography>

@@ -86,7 +86,7 @@ const Headers = () => {
                 <div className="flex items-center gap-4">
                     <div className="mr-4 hidden lg:block">{navList}</div>
                     {user ? (<div className="flex items-center gap-x-4">
-                        <Typography variant="small" className="font-concert" color="blue-gray">
+                        <Typography variant="small" className="font-concert hidden lg:inline-block" color="blue-gray">
                             Welcome, {user.name}</Typography>
                         <Button
                             onClick={logoutHandler}
