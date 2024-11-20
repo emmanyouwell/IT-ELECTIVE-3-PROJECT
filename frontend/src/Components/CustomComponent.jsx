@@ -5,7 +5,7 @@ const CustomComponent = ({onClick}) => {
     return (
         /* From Uiverse.io by Cobp */
         <section
-            className="relative group flex flex-col items-center justify-center w-50 h-50"
+            className="relative group flex flex-col items-center justify-center w-30 h-30"
             
         >
             <div
