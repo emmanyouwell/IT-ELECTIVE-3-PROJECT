@@ -178,7 +178,7 @@ const Files = ({ group}) => {
 
                         {!groups.quiz && <AddQuizSection groupId={groups._id} />}
                         {groups.quiz && groups.quiz.questions && groups.quiz.questions.length > 0 &&
-                            <section className="p-10 border-8 rounded-lg" style={{ borderColor: borderColors[0] }}>
+                            <section className="p-4 lg:p-10 border-8 rounded-lg" style={{ borderColor: borderColors[0] }}>
                                 <div className="container flex flex-col justify-center items-center mb-10 mx-auto">
                                     <div className="flex justify-end w-full">
                                         {user.groupID._id === groups._id && user.role !== 'admin' && (<div className="flex space-x-4">
@@ -203,7 +203,7 @@ const Files = ({ group}) => {
                             </section>}</>) : <>{groups.subtopics.length === 0 && <div className="container flex flex-col justify-center items-center mb-10 mx-auto">No subtopics available</div>}</>}
                     {user.groupID._id !== groups._id && (<>
                         {groups.quiz && groups.quiz.questions ? (
-                                <section className="p-10 border-8 rounded-lg"><div className="container flex flex-col justify-center items-center mb-10 mx-auto">
+                                <section className="p-4 lg:p-10 border-8 rounded-lg"><div className="container flex flex-col justify-center items-center mb-10 mx-auto">
                                     <h1 className="font-concert  text-3xl font-bold mb-3">Quiz</h1>
 
                                     <FlipCards questions={groups.quiz.questions} />
