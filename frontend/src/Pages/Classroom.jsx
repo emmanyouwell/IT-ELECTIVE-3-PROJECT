@@ -12,7 +12,7 @@ const Classroom = () => {
     const sideNavRef = useRef(null); // Create a ref for the SideNav
     const [group, setGroup] = useState(null);
     const { user } = useSelector(state => state.auth);
-
+    const [selectedSubtopic, setSelectedSubtopic] = useState(null)
     const driverObj = driver({
         showProgress: true,
         allowClose: false,
@@ -75,7 +75,7 @@ const Classroom = () => {
                 <span className="text-2xl">&#9776;</span>
             </button>
             <div className={`hidden md:block`}>
-                {user && user.role === 'admin' ? <AdminSideNav setGroup={setGroup} /> : <SideNav setGroup={setGroup} />}
+                {user && user.role === 'admin' ? <AdminSideNav setGroup={setGroup} setSelectedSubtopic={setSelectedSubtopic}/> : <SideNav setGroup={setGroup} />}
 
             </div>
             {isSideNavVisible && (
@@ -85,12 +85,12 @@ const Classroom = () => {
                         className={`fixed left-0 top-0 bg-white w-64 h-full transition-transform duration-300 transform ${isSideNavVisible ? 'translate-x-0' : '-translate-x-full'}`}
                         style={{ transition: 'transform 0.3s ease-in-out' }}
                     >
-                        {user.role === 'admin' ? <AdminSideNav setGroup={setGroup} /> : <SideNav setGroup={setGroup} />}
+                        {user.role === 'admin' ? <AdminSideNav setGroup={setGroup} setSelectedSubtopic={setSelectedSubtopic}/> : <SideNav setGroup={setGroup} />}
                     </div>
                 </div>
             )}
             <div className="px-4 pt-10 w-full my-10 lg:my-0">
-                <Files group={group} />
+                <Files group={group} selectedSubtopic={selectedSubtopic}/>
             </div>
 
         </div>

@@ -1,6 +1,6 @@
 .card {
   width: 50%;
-  height: 90vh;
+  height: 50vh;
   perspective: 1000px;
 }
 .card-text {

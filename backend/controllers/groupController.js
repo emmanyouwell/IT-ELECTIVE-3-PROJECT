@@ -23,7 +23,7 @@ exports.createGroup = async (req, res, next) => {
 
 exports.getGroups = async (req, res, next) => {
     try {
-        const groups = await Group.find();
+        const groups = await Group.find().populate([{path: 'subtopics'}]);
         res.status(200).json({
             success: true,
             groups

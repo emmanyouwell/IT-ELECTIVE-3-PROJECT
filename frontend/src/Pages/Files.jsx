@@ -27,9 +27,10 @@ const borderColors = ['#264653', '#2a9d8f', '#e9c46a', '#f4a261', '#e76f51']; //
 
 import EditSubtopic from '../Components/EditSubtopic';
 import { toast } from 'react-toastify';
-const Files = ({ group}) => {
+const Files = ({ group, selectedSubtopic }) => {
     const dispatch = useDispatch();
     const editRef = useRef(null);
+    const subtopicRefs = useRef({});
     const [editId, setEditId] = useState('');
     const { quiz } = useSelector(state => state.quizDetails)
     const { isVisible } = useSelector(state => state.form)
@@ -96,6 +97,17 @@ const Files = ({ group}) => {
         }
 
     }, [isVisible, editVisible, quizVisible])
+    useEffect(() => {
+        if (selectedSubtopic && subtopicRefs.current[selectedSubtopic]) {
+            const element = subtopicRefs.current[selectedSubtopic];
+            const offset = -100; // Adjust the value for desired spacing
+            const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+            window.scrollTo({
+                top: elementPosition + offset,
+                behavior: "smooth",
+            });
+        }
+    }, [selectedSubtopic]);
 
     return (
         <>
@@ -112,6 +124,7 @@ const Files = ({ group}) => {
                                 data-aos="fade-up"
                                 className="p-5 sm:p-8 md:p-10 border-8 my-3 rounded-lg"
                                 key={index}
+                                ref={(el) => (subtopicRefs.current[item._id] = el)} // Store ref for each subtopic
                                 style={{ borderColor: getColor(index, borderColors) }}
                             >
                                 <div className="flex justify-between items-center mb-6 sm:mb-10">
@@ -174,7 +187,7 @@ const Files = ({ group}) => {
                         {editVisible && (<div ref={editRef}>
                             <EditSubtopic subtopicId={editId} /></div>)}
                         {!isVisible && <AddNewSectionButton onAdd={showForm} />}
-                        {isVisible && (<NewSubtopic groupId={groups._id}/>)}
+                        {isVisible && (<NewSubtopic groupId={groups._id} />)}
 
                         {!groups.quiz && <AddQuizSection groupId={groups._id} />}
                         {groups.quiz && groups.quiz.questions && groups.quiz.questions.length > 0 &&
@@ -203,11 +216,11 @@ const Files = ({ group}) => {
                             </section>}</>) : <>{groups.subtopics.length === 0 && <div className="container flex flex-col justify-center items-center mb-10 mx-auto">No subtopics available</div>}</>}
                     {user.groupID._id !== groups._id && (<>
                         {groups.quiz && groups.quiz.questions ? (
-                                <section className="p-4 lg:p-10 border-8 rounded-lg"><div className="container flex flex-col justify-center items-center mb-10 mx-auto">
-                                    <h1 className="font-concert  text-3xl font-bold mb-3">Quiz</h1>
+                            <section className="p-4 lg:p-10 border-8 rounded-lg"><div className="container flex flex-col justify-center items-center mb-10 mx-auto">
+                                <h1 className="font-concert  text-3xl font-bold mb-3">Quiz</h1>
 
-                                    <FlipCards questions={groups.quiz.questions} />
-                                </div></section>) : <div className="container flex flex-col justify-center items-center mb-10 mx-auto">No quiz available</div>}</>)}
+                                <FlipCards questions={groups.quiz.questions} />
+                            </div></section>) : <div className="container flex flex-col justify-center items-center mb-10 mx-auto">No quiz available</div>}</>)}
 
                 </>) : (<><div className="flex justify-center items-center h-[90%]"><img src={choose} alt="choose group" /></div></>)}
 
