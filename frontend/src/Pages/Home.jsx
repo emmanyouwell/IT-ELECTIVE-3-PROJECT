@@ -28,7 +28,22 @@ const Home = () => {
     const handleClick = () => {
         setSplash(true);
         navigate('/classroom');
+<<<<<<< HEAD
     };
+=======
+    }
+    const logoutHandler = () => {
+
+        dispatch(logoutUser());
+        toast.success('Logged out');
+
+
+    }
+
+    useEffect(()=>{
+        dispatch(getUser())
+    },[dispatch])
+>>>>>>> d96146bf0dbf4f62ef9e6666373e33aa4275f0a8
 
     return (
         <>
@@ -63,6 +78,7 @@ const Home = () => {
                             ))}
                         </div>
                         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+<<<<<<< HEAD
                             {user ? (
                                 <Typography variant="small" className="font-concert hidden lg:inline-block" color="blue-gray">
                                     Welcome, {user.name}
@@ -72,6 +88,25 @@ const Home = () => {
                                     Log in <span aria-hidden="true">&rarr;</span>
                                 </a>
                             )}
+=======
+                        {user ? (<div className="flex items-center gap-x-4">
+                                            <Typography variant="small" className="font-concert hidden lg:inline-block" color="blue-gray">
+                                                Welcome, {user.name}</Typography>
+                                            <Button
+                                                onClick={logoutHandler}
+                                                variant="gradient"
+                                                size="sm"
+                                                className="hidden lg:inline-block"
+                                            >
+                                                <span>Log Out</span>
+                                            </Button>
+                                        </div>) : (<a
+                                            href="/login"
+                                            className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                                        >
+                                            Log in
+                                        </a>)}
+>>>>>>> d96146bf0dbf4f62ef9e6666373e33aa4275f0a8
                         </div>
                     </nav>
                     <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
@@ -109,6 +144,7 @@ const Home = () => {
                                         ))}
                                     </div>
                                     <div className="py-6">
+<<<<<<< HEAD
                                         {user ? (
                                             <Typography variant="small" className="font-concert text-gray-900">
                                                 Welcome, {user.name}
@@ -121,6 +157,26 @@ const Home = () => {
                                                 Log in
                                             </a>
                                         )}
+=======
+                                        {user ? (<div className="flex items-center gap-x-4">
+                                            <Typography variant="small" className="font-concert hidden lg:inline-block" color="blue-gray">
+                                                Welcome, {user.name}</Typography>
+                                            <Button
+                                                onClick={logoutHandler}
+                                                variant="gradient"
+                                                size="sm"
+                                                className="hidden lg:inline-block"
+                                            >
+                                                <span>Log Out</span>
+                                            </Button>
+                                        </div>) : (<a
+                                            href="/login"
+                                            className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                                        >
+                                            Log in
+                                        </a>)}
+
+>>>>>>> d96146bf0dbf4f62ef9e6666373e33aa4275f0a8
                                     </div>
                                 </div>
                             </div>
@@ -224,8 +280,21 @@ const Home = () => {
                         </div>
                     </div>
                 </section>
+<<<<<<< HEAD
             </div>
             <Footer />
+=======
+            </div >
+
+            <Footer />
+            {/* <div className="container mx-auto flex justify-center align-center h-screen">
+                <CustomComponent onClick={handleClick}/>
+            </div> */}
+
+
+
+
+>>>>>>> d96146bf0dbf4f62ef9e6666373e33aa4275f0a8
         </>
     );
 };
