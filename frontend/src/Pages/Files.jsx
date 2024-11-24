@@ -178,10 +178,10 @@ const Files = ({ group, selectedSubtopic }) => {
                 <>
                   <section
                     data-aos="fade-up"
-                    className="p-5 sm:p-8 md:p-10 border-8 my-3 rounded-lg"
+                    className="p-5 sm:p-8 md:p-10  my-3 rounded-lg"
                     key={index}
                     ref={(el) => (subtopicRefs.current[item._id] = el)} // Store ref for each subtopic
-                    style={{ borderColor: getColor(index, borderColors) }}
+                    // style={{ borderColor: getColor(index, borderColors) }}
                   >
                     <div className="flex justify-between items-center mb-6 sm:mb-10">
                       <p className="text-xl sm:text-2xl">

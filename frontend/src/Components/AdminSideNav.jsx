@@ -103,9 +103,9 @@ const AdminSideNav = ({ setGroup, setSelectedSubtopic }) => {
                                         key={subtopic._id}
                                         onClick={() => setSelectedSubtopic(subtopic._id)}
                                     >
-                                        <ListItemPrefix>
+                                        {/* <ListItemPrefix>
                                             <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                                        </ListItemPrefix>
+                                        </ListItemPrefix>  */}
                                         {subtopic.title}
                                     </ListItem>
                                 ))}
