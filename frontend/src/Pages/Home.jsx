@@ -1,32 +1,35 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import SideNav from '../Components/SideNav'
-import CustomComponent from '../Components/CustomComponent'
-import { useNavigate } from 'react-router-dom'
-import { Dialog, DialogPanel } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import logo from '../assets/image/ICON.png'
-import icon1 from '../assets/image/icon1.png'
-import icon2 from '../assets/image/icon2.png'
-import icon3 from '../assets/image/icon3.png'
-import icon4 from '../assets/image/icon4.png'
-
-import Headers from '../Components/Headers'
-import Rubiks from '../Components/Rubiks'
-import Footer from '../Components/Footer'
-import CardNew from '../Components/CardNew'
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { Dialog, DialogPanel } from '@headlessui/react';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+// import logo from '../assets/image/ICON.png';
+import icon1 from '../assets/image/icon1.png';
+import icon2 from '../assets/image/icon2.png';
+import icon3 from '../assets/image/icon3.png';
+import icon4 from '../assets/image/icon4.png';
+import Headers from '../Components/Headers';
+import CustomComponent from '../Components/CustomComponent';
+import Footer from '../Components/Footer';
+import { Typography } from "@material-tailwind/react";
+import logo1 from "../assets/IT PROFESSIONAL.png"
 const Home = () => {
     const navigate = useNavigate();
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [splash, setSplash] = useState(false);
+    const { user } = useSelector(state => state.auth);
+
     const navigation = [
         { name: 'Text to Json', href: '/converter' },
         { name: 'Classroom', href: '/classroom' },
-    ]
+    ];
+
     const handleClick = () => {
         setSplash(true);
         navigate('/classroom');
-    }
+    };
+
     return (
         <>
             <div className="bg-white mb-36">
@@ -37,7 +40,7 @@ const Home = () => {
                                 <span className="sr-only">IT Professional Elective 3</span>
                                 <img
                                     alt=""
-                                    src={logo}
+                                    src={logo1}
                                     className="h-20 w-auto"
                                 />
                             </a>
@@ -60,9 +63,15 @@ const Home = () => {
                             ))}
                         </div>
                         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                            <a href="/login" className="text-sm/6 font-semibold text-gray-900">
-                                Log in <span aria-hidden="true">&rarr;</span>
-                            </a>
+                            {user ? (
+                                <Typography variant="small" className="font-concert hidden lg:inline-block" color="blue-gray">
+                                    Welcome, {user.name}
+                                </Typography>
+                            ) : (
+                                <a href="/login" className="text-sm/6 font-semibold text-gray-900">
+                                    Log in <span aria-hidden="true">&rarr;</span>
+                                </a>
+                            )}
                         </div>
                     </nav>
                     <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
@@ -73,7 +82,7 @@ const Home = () => {
                                     <span className="sr-only">IT Professional Elective 3</span>
                                     <img
                                         alt=""
-                                        src={logo}
+                                        src={logo1}
                                         className="h-20 w-auto"
                                     />
                                 </a>
@@ -100,12 +109,18 @@ const Home = () => {
                                         ))}
                                     </div>
                                     <div className="py-6">
-                                        <a
-                                            href="#"
-                                            className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
-                                        >
-                                            Log in
-                                        </a>
+                                        {user ? (
+                                            <Typography variant="small" className="font-concert text-gray-900">
+                                                Welcome, {user.name}
+                                            </Typography>
+                                        ) : (
+                                            <a
+                                                href="/login"
+                                                className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                                            >
+                                                Log in
+                                            </a>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -146,9 +161,15 @@ const Home = () => {
                                 >
                                     Get started
                                 </a>
-                                <a href="/login" className="text-sm/6 font-semibold text-gray-900">
-                                    Log in <span aria-hidden="true">→</span>
-                                </a>
+                                {user ? (
+                                    <Typography variant="small" className="font-concert text-gray-900">
+                                        Welcome, {user.name}
+                                    </Typography>
+                                ) : (
+                                    <a href="/login" className="text-sm/6 font-semibold text-gray-900">
+                                        Log in <span aria-hidden="true">→</span>
+                                    </a>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -168,10 +189,8 @@ const Home = () => {
                 <section className="flex justify-center items-center px-36">
                     <div className="flex items-start gap-4">
                         <img src={icon1} alt="icon1" className="size-20 rounded-lg object-cover" />
-
                         <div>
                             <h3 className="text-lg/tight font-medium text-gray-900">Specialized Skill Development</h3>
-
                             <p className="mt-0.5 text-gray-700">
                                 Focuses on enhancing specific IT skills based on the elective's specialization, such as cybersecurity, data analytics, cloud computing, or software development.
                             </p>
@@ -179,51 +198,36 @@ const Home = () => {
                     </div>
                     <div className="flex items-start gap-4">
                         <img src={icon2} alt="icon1" className="size-20 rounded-lg object-cover" />
-
                         <div>
                             <h3 className="text-lg/tight font-medium text-gray-900">Industry-Relevant Applications</h3>
-
                             <p className="mt-0.5 text-gray-700">
-                            Covers practical applications of IT concepts and tools to address real-world problems, bridging the gap between academic knowledge and industry requirements.
+                                Covers practical applications of IT concepts and tools to address real-world problems, bridging the gap between academic knowledge and industry requirements.
                             </p>
                         </div>
                     </div>
                     <div className="flex items-start gap-4">
                         <img src={icon3} alt="icon1" className="size-20 rounded-lg object-cover" />
-
                         <div>
                             <h3 className="text-lg/tight font-medium text-gray-900">Emerging Technologies and Trends</h3>
-
                             <p className="mt-0.5 text-gray-700">
-                            Explores cutting-edge technologies, frameworks, and methodologies in IT, ensuring students stay updated with the latest advancements and best practices.
+                                Explores cutting-edge technologies, frameworks, and methodologies in IT, ensuring students stay updated with the latest advancements and best practices.
                             </p>
                         </div>
                     </div>
                     <div className="flex items-start gap-4">
                         <img src={icon4} alt="icon1" className="size-20 rounded-lg object-cover" />
-
                         <div>
                             <h3 className="text-lg/tight font-medium text-gray-900">Project-Based Learning</h3>
-
                             <p className="mt-0.5 text-gray-700">
-                            Includes hands-on projects or case studies to encourage innovation, problem-solving, and teamwork while applying the skills learned during the course.
+                                Includes hands-on projects or case studies to encourage innovation, problem-solving, and teamwork while applying the skills learned during the course.
                             </p>
                         </div>
                     </div>
                 </section>
             </div>
-         
-            <Footer/>
-            {/* <div className="container mx-auto flex justify-center align-center h-screen">
-                <CustomComponent onClick={handleClick}/>
-            </div> */}
-
-
-
-
+            <Footer />
         </>
+    );
+};
 
-    )
-}
-
-export default Home
+export default Home;

@@ -1,5 +1,6 @@
 import React from 'react'
 import logo from '../assets/image/ICON.png'
+import logo1 from '../assets/IT PROFESSIONAL.png'
 import { Link } from 'react-router-dom'
 const Footer = () => {
     return (
@@ -30,7 +31,7 @@ const Footer = () => {
                 <div className="lg:flex lg:items-end lg:justify-between">
                     <div>
                         <div className="flex justify-center text-teal-600 lg:justify-start">
-                            <img src={logo} alt="logo" className="w-24 h-24" />
+                            <img src={logo1} alt="logo" className="w-24 h-24" />
                         </div>
 
                         <p className="mx-auto max-w-md text-center leading-relaxed text-gray-500 lg:text-left">
