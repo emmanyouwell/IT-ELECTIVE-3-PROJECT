@@ -5,8 +5,6 @@ import {
     List,
     ListItem,
     ListItemPrefix,
-    ListItemSuffix,
-    Chip,
     Accordion,
     AccordionHeader,
     AccordionBody,
@@ -14,8 +12,9 @@ import {
 import { getGroups, getGroupDetails, clearErrors } from '../Actions/groupActions';
 import { getUser } from '../Actions/authActions';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
+
 const AdminSideNav = ({ setGroup, setSelectedSubtopic }) => {
     const listItemRefs = useRef([]);
     const [open, setOpen] = useState(0);
@@ -23,9 +22,10 @@ const AdminSideNav = ({ setGroup, setSelectedSubtopic }) => {
     const handleOpen = (value) => {
         setOpen(open === value ? 0 : value);
     };
-    const { user, isAuthenticated } = useSelector(state => state.auth)
+
+    const { user, isAuthenticated } = useSelector(state => state.auth);
+
     const handleTabClick = (groupId, index) => {
-        // Reset background color for all list items
         listItemRefs.current.forEach((item) => {
             if (item) {
                 item.style.backgroundColor = 'white';
@@ -33,7 +33,6 @@ const AdminSideNav = ({ setGroup, setSelectedSubtopic }) => {
             }
         });
 
-        // Set background color for the clicked list item
         if (listItemRefs.current[index]) {
             listItemRefs.current[index].style.backgroundColor = 'black';
             listItemRefs.current[index].style.color = 'white';
@@ -41,12 +40,14 @@ const AdminSideNav = ({ setGroup, setSelectedSubtopic }) => {
 
         handleClick(groupId);
     };
-    const dispatch = useDispatch()
-    const { groups: allGroups, loading, error: allErrors } = useSelector(state => state.groups)
+
+    const dispatch = useDispatch();
+    const { groups: allGroups, loading, error: allErrors } = useSelector(state => state.groups);
     const { groups, error } = useSelector(state => state.groupDetails);
+
     const handleClick = (menuItem) => {
         setGroup(menuItem);
-    }
+    };
 
     useEffect(() => {
         if (error) {
@@ -56,16 +57,16 @@ const AdminSideNav = ({ setGroup, setSelectedSubtopic }) => {
             dispatch(clearErrors());
         }
 
-
         dispatch(getGroups());
         dispatch(getUser());
-    }, [dispatch, error, allErrors])
+    }, [dispatch, error, allErrors]);
 
-    useEffect(()=>{
-        if (allGroups){
+    useEffect(() => {
+        if (allGroups) {
             console.log("groups: ", allGroups);
         }
-    },[allGroups])
+    }, [allGroups]);
+
     return (
         <Card className="h-screen w-72 max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 sticky top-0 border-2">
             <div className="mb-2 p-4">
@@ -75,10 +76,10 @@ const AdminSideNav = ({ setGroup, setSelectedSubtopic }) => {
                     </Typography>
                 </Link>
             </div>
-            <List className="h-full">
-
+            <List className="h-full overflow-y-auto scrollbar-hide">
                 {allGroups && allGroups.map((group, index) => (
                     <Accordion
+                        key={group._id}
                         open={open === index + 1}
                         icon={
                             <ChevronDownIcon
@@ -88,42 +89,33 @@ const AdminSideNav = ({ setGroup, setSelectedSubtopic }) => {
                         }
                     >
                         <ListItem
-                            key={group._id}
-                            onClick={() => handleTabClick(group._id)}
-
+                            onClick={() => handleTabClick(group._id, index)}
                             className="cursor-pointer p-2 rounded transition-colors font-bold"
                         >
                             <AccordionHeader onClick={() => handleOpen(index + 1)} className="border-b-0 p-3">
-
                                 {group.topic}
                             </AccordionHeader>
                         </ListItem>
-                        {/* <AccordionBody className="py-1">
-                            <List className="p-0">
-                                
-                            </List>
-                        </AccordionBody> */}
                         <AccordionBody className="py-1">
                             <List className="p-0">
-                                {group.subtopics && group.subtopics.length > 0 &&  group.subtopics.map((subtopic) => (
-                                    <ListItem 
-                                    key={subtopic._id}
-                                    onClick={() => setSelectedSubtopic(subtopic._id)}>
+                                {group.subtopics && group.subtopics.length > 0 && group.subtopics.map((subtopic) => (
+                                    <ListItem
+                                        key={subtopic._id}
+                                        onClick={() => setSelectedSubtopic(subtopic._id)}
+                                    >
                                         <ListItemPrefix>
                                             <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                                         </ListItemPrefix>
                                         {subtopic.title}
                                     </ListItem>
                                 ))}
-
-
                             </List>
                         </AccordionBody>
                     </Accordion>
                 ))}
             </List>
         </Card>
-    )
+    );
 }
 
-export default AdminSideNav
+export default AdminSideNav;
